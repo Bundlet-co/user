@@ -4,7 +4,7 @@ import { Button, Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { BsHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import {FaCartShopping} from "react-icons/fa6"
-import EmptyItem from "@/components/EmptyItem";
+import EmptyItem from "@/components/EmptyItem"
 
 const Wishlist = () =>
 {
