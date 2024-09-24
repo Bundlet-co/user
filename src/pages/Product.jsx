@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { FaCartShopping } from 'react-icons/fa6';
 import { BsHeart } from 'react-icons/bs';
 import { dev_url } from "@/utils/axios";
+import EmptyItem from "@/components/EmptyItem";
 
 
 const Product = () =>
@@ -21,7 +22,9 @@ const Product = () =>
   const { products,hasMore,ref } = useInfiteScroll( {url:endpoint, category } );
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      { products.length > 0 ? (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {products.map((product) => (
           
           <Card key={product.id} shadow='sm' className='relative me-4 flex-none'>
@@ -69,6 +72,8 @@ const Product = () =>
       {hasMore ? <div ref={ref} className='h-12 text-center my-3'>
         <Spinner color='primary' className='mx-auto'/>
       </div> : null}
+        </>
+      ): <EmptyItem name="Product"/>}
     </div>
   )
 }

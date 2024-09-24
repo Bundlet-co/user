@@ -4,6 +4,7 @@ import { Button, Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { BsHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import {FaCartShopping} from "react-icons/fa6"
+import EmptyItem from "@/components/EmptyItem";
 
 const Wishlist = () =>
 {
@@ -47,9 +48,7 @@ const Wishlist = () =>
   ])
   return (
     wishlists.length <= 0 ? (
-      <section className="h-full flex justify-center items-center">
-        <p>No item in your wishlists</p>
-      </section>
+      <EmptyItem name="wishlists"/>
     ) : (
         <section className="h-full">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

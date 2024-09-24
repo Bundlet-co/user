@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { BsArrowLeftCircle, BsArrowRightCircle, BsHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import {FaCartShopping} from "react-icons/fa6"
+import EmptyItem from "../EmptyItem";
 
 
 const ItemSection = ({name,endpoint,category}) =>
@@ -130,7 +131,8 @@ const ItemSection = ({name,endpoint,category}) =>
         <p className="text-lg font-bold text-primary capitalize">{name}</p>
         <Link to={`/product?category=${category}`} className="text-tiny md:text-small underline underline-offset-2 capitalize">see more</Link>
       </div>
-      <div className="flex gap-4 relative">
+      { products.length > 0 ? (
+        <div className="flex gap-4 relative">
         <button onClick={() => scroll("left")} className={products.length > 2 ? 'absolute top-1/2 z-10 left-0  hover:text-white rounded-full  me-2 bg-white text-primary hover:bg-primary' : "hidden"} >
           <BsArrowLeftCircle size={36}/>
         </button>
@@ -184,6 +186,11 @@ const ItemSection = ({name,endpoint,category}) =>
           <BsArrowRightCircle size={36}/>
         </button>
       </div>
+      ) : (
+          <div className="h-20">
+            <EmptyItem name="product"/>
+          </div>
+      )}
     </div>
   )
 }

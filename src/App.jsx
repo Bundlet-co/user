@@ -12,6 +12,7 @@ import RequiredAuth from "@/pages/RequiredAuth";
 import Cart from "@/pages/Cart";
 import Wishlist from "@/pages/Wishlist";
 import Missing from "./pages/Missing";
+import Profile from "./pages/Profile";
 
 
 const App = () => {
@@ -33,7 +34,8 @@ const App = () => {
         <Route element={ <Persit /> }>
           <Route element={ <RequiredAuth /> }>
             <Route path="cart" element={ <Cart /> } />
-            <Route path="wishlist" element={<Wishlist/>}/>
+            <Route path="wishlist" element={ <Wishlist /> } />
+            <Route path="profile" element={<Profile/>}/>
           </Route>
         </Route>
         <Route path="*" element={<Missing/>}/>

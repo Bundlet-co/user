@@ -1,3 +1,4 @@
+import EmptyItem from "@/components/EmptyItem";
 import { dev_url } from "@/utils/axios";
 import { Button, Image } from "@nextui-org/react";
 import { useState } from "react";
@@ -46,9 +47,7 @@ const Cart = () =>
   }])
   return (
     carts.length <= 0 ? (
-      <section className="h-full flex justify-center items-center">
-        <p>No item in your carts</p>
-      </section>
+      <EmptyItem name="cart"/>
     ) : (
         <section className="h-full flex flex-col">
           <p className="text-lg md:text-xl text-primary py-2 font-extrabold">My Cart</p>
