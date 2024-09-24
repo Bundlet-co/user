@@ -48,7 +48,7 @@ const Wishlist = () =>
   ])
   return (
     wishlists.length <= 0 ? (
-      <EmptyItem name="wishlists"/>
+      <EmptyItem message="Your wishlist is empty"/>
     ) : (
         <section className="h-full">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

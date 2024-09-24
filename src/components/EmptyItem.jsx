@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 
 
-const EmptyItem = ({name=""}) => {
+const EmptyItem = ({message=""}) => {
   return (
     <section className="h-full flex justify-center items-center">
-      <p>No item in your { name }</p>
+      <p> { message }</p>
     </section>
   )
 }

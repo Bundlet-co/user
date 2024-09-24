@@ -10,15 +10,18 @@ import { Button, Image, Spinner } from "@nextui-org/react";
 import { dev_url } from "@/utils/axios";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import { FaCartShopping } from "react-icons/fa6";
+import EmptyItem from "@/components/EmptyItem";
+import useMainContext from "@/hooks/useMainContext";
 
 
 const SingleProduct = () =>
 {
   const { id } = useParams();
   const [ loading, setLoading ] = useState( true );
-  const [product, setProduct] = useState({} );
+  const [product, setProduct] = useState( null );
   const [ carouselImg, setCarouselImg ] = useState( [] );
   const {fetchData} = useAxiosFetch()
+  const {openToast} = useMainContext()
 
   useState( () =>
   {
@@ -29,18 +32,28 @@ const SingleProduct = () =>
         setProduct( res.data.product );
         setCarouselImg( [ res.data.product.dp, ...res.data.product.images ] );
       } catch (error) {
-        console.error(error);
+        if ( error.message === "Product not found" ) {
+          setProduct( null )
+          setCarouselImg( [] );
+          openToast("Product does not exist", "error")
+        }
+        setProduct( null )
+        setCarouselImg( [] )
+        openToast("Error fetching product", "error")
       } finally {
         setLoading(false)
       }
     })()
   }, [] )
-  
-  console.log(product);
   return (
-    loading ? <div className="h-full flex justify-center items-center">
-      <Spinner/>
-    </div> : (
+    <section className="h-full">
+      {loading && !product && (<div className="h-full flex justify-center items-center">
+        <Spinner/>
+      </div> ) }
+      { !loading && !product && (
+        <EmptyItem message="Product not found !!"/>
+      )}
+      { !loading && product && (
         <div className="relative">
       <Swiper
         effect="coverflow"
@@ -103,7 +116,9 @@ const SingleProduct = () =>
           </div>
           
     </div>
-    )
+      ) }
+      
+    </section>
   )
 }
 

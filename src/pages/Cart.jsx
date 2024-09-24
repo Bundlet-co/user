@@ -47,7 +47,7 @@ const Cart = () =>
   }])
   return (
     carts.length <= 0 ? (
-      <EmptyItem name="cart"/>
+      <EmptyItem message="Your cart is empty!!!"/>
     ) : (
         <section className="h-full flex flex-col">
           <p className="text-lg md:text-xl text-primary py-2 font-extrabold">My Cart</p>
