@@ -21,7 +21,7 @@ const Product = () =>
 
   const { products,hasMore,ref } = useInfiteScroll( {url:endpoint, category } );
   return (
-    <div>
+    <div className="h-full">
       { products.length > 0 ? (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -73,7 +73,7 @@ const Product = () =>
         <Spinner color='primary' className='mx-auto'/>
       </div> : null}
         </>
-      ): <EmptyItem name="Product"/>}
+      ): <EmptyItem message="No product found"/>}
     </div>
   )
 }
