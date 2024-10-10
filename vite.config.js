@@ -7,27 +7,29 @@ import path from "path"
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const vitePWA = VitePWA({
-  name: "Bundlet",
-  short_name: "Bundlet",
-  description: "Bundlet: A ones stop ecommerce platform",
-  theme_color: "#ffffff",
-  icons: [
-    {
-      src: "/logo.png",
-      sizes: "192x192",
-      type: "image/png"
-    },
-    {
-      src: "/logo.png",
-      sizes: "512x512",
-      type: "image/png"
-    },
-    {
-      src: "/logo.png",
-      sizes: "64x64 32x32 24x24 16x16",
-      type: "image/x-icon"
-    }
-  ]
+  manifest: {
+    name: "Bundlet",
+    short_name: "Bundlet",
+    description: "Bundlet: A ones stop ecommerce platform",
+    theme_color: "#ffffff",
+    icons: [
+      {
+        src: "/logo.png",
+        sizes: "192x192",
+        type: "image/png"
+      },
+      {
+        src: "/logo.png",
+        sizes: "512x512",
+        type: "image/png"
+      },
+      {
+        src: "/logo.png",
+        sizes: "64x64 32x32 24x24 16x16",
+        type: "image/x-icon"
+      }
+    ]
+  }
 })
 export default defineConfig({
   plugins: [react(),vitePWA],

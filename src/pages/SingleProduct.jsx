@@ -6,22 +6,34 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
 import { EffectCoverflow, Pagination,Autoplay } from 'swiper/modules';
-import { Button, Image, Spinner } from "@nextui-org/react";
+import { Button, Image, Spinner, useDisclosure } from "@nextui-org/react";
 import { dev_url } from "@/utils/axios";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import { FaCartShopping } from "react-icons/fa6";
 import EmptyItem from "@/components/EmptyItem";
 import useMainContext from "@/hooks/useMainContext";
+import AddToCartModal from "@/components/product/AddToCartModal";
+import { PRODUCT } from "@/constant";
 
 
 const SingleProduct = () =>
 {
   const { id } = useParams();
   const [ loading, setLoading ] = useState( true );
-  const [product, setProduct] = useState( null );
+  const [ product, setProduct ] = useState( PRODUCT );
   const [ carouselImg, setCarouselImg ] = useState( [] );
+  const [ color, setColor ] = useState( [ { price: "", quantity: "", type: "", variant: "" } ] );
+  const [ size, setSize ] = useState( [ { price: "", quantity: "", type: "", variant: "" } ] );
+  const [ others, setOthers ] = useState( [ { price: "", quantity: "", type: "", variant: "" } ] );
   const {fetchData} = useAxiosFetch()
-  const {openToast} = useMainContext()
+  const { openToast } = useMainContext();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  
+  const getVariation = ( type = "",variation =[{ price: "", quantity: "", type: "", variant: "" }],setState ) =>
+  {
+    const variant = variation.filter( item => item.type.toLowerCase() === type.toLowerCase() )
+    setState(variant)
+  }
 
   useState( () =>
   {
@@ -30,6 +42,9 @@ const SingleProduct = () =>
       try {
         const res = await fetchData( false, `/product/${ id }` );
         setProduct( res.data.product );
+        getVariation( "color", res.data.product.variation,setColor ) ;
+        getVariation( "size", res.data.product.variation,setSize ) ;
+        getVariation( "others", res.data.product.variation,setOthers ) ;
         setCarouselImg( [ res.data.product.dp, ...res.data.product.images ] );
       } catch (error) {
         if ( error.message === "Product not found" ) {
@@ -46,7 +61,7 @@ const SingleProduct = () =>
     })()
   }, [] )
   return (
-    <section className="h-full">
+    <section className="h-full overflow-y-auto">
       {loading && !product && (<div className="h-full flex justify-center items-center">
         <Spinner/>
       </div> ) }
@@ -80,35 +95,72 @@ const SingleProduct = () =>
       <div className="pt-4">
         <hr />
             <div className="flex">
-              <p className="text-2xl font-bold capitalize">{ product.name } <span className="text-tiny text-primary lowercase">{ product.quantity } units available</span></p>
+              <p className="text-2xl font-bold capitalize">{ product.name } <span className="text-tiny text-primary lowercase">{ product.quantity } {product.unit} available</span></p>
         </div>
             <div className="my-2">
               <p className='text-primary font-bold text-medium'>Price:
           <span className={ product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ product.price }</span>
-          <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${product.price - product.discount_amount}`: `₦${(product.discount_amount*product.price)/100}` }</span>
+          <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${product.price - product.discount_amount}`: `₦${product.price - ((product.discount_amount*product.price)/100)}` }</span>
             </p>
             <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Description</p>
             <p>{ product.description }</p>
             { product.slug.map( item => (
               <span className="text-thin text-tiny border p-1 rounded-lg bg-primary-600 text-white italic me-1" key={ product.slug.indexOf( item ) }>#{ item }</span>
             ))}
-            <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Available colors</p>
-            <div className="flex space-x-4">
-              { product.color.map( item => (
-                <div className={`h-8 w-8 rounded-md`} role="button" style={{ backgroundColor:item }} key={ product.color.indexOf( item ) }/>
-            ))}
-            </div>
-            <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Available sizes</p>
-            <div className="flex space-x-4">
-              { product.size.map( item => (
-                <div className={ `h-8 w-8 rounded-md border` } role="button" key={ product.color.indexOf( item ) }>
-                  <p className="text-center uppercase font-bold">{ item }</p>
+            { color.length > 0 && (
+              <div>
+                <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Available colors</p>
+                <div className="flex space-x-4">
+                    { color.map( item => (
+                    <div className={`h-8 w-8 rounded-md`} role="button" style={{ backgroundColor:item.variant }} key={ color.indexOf( item ) }/>
+                  ))}
                 </div>
-            ))}
-            </div>
+              </div>
+              ) }
+              { size.length > 0 && (
+              <div>
+                <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Available Sizes</p>
+                <div className="flex space-x-4">
+                    { size.map( item => (
+                    <div className={ `h-8 w-8 rounded-md border` } role="button" key={ size.indexOf( item ) }>
+                  <p className="text-center uppercase font-bold">{ item.variant }</p>
+                </div>
+                  ))}
+                </div>
+              </div>
+              ) }
+              
+              { others.length > 0 && (
+              <div>
+                <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Available Variations</p>
+                <div className="flex space-x-4">
+                    { others.map( item => (
+                    <div className={ `h-8 w-8 rounded-md border` } role="button" key={ others.indexOf( item ) }>
+                  <p className="text-center uppercase font-bold">{ item.variant }</p>
+                </div>
+                  ))}
+                </div>
+              </div>
+              ) }
+              { product.suplementryProducts.length > 0 && (
+                <div>
+                  <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Suplementry Products</p>
+                  <div className="grid grid-cols-5 md:grid-cols-10 gap-4">
+                    { product.suplementryProducts.map( item => (
+                      <div key={ item.id } className="col-span-1 border rounded-2xl p-2 shadow">
+                        <Image src={ `${ dev_url }/${ item.dp.replace( "public/", "" ) }` } className=" w-32 h-24 object-contain border mb-4" />
+                        <p className="capitalize text-small font-semibold">{ item.name }</p>
+                        <p className="text-tiny my-2">Price: ₦{ item.price }</p>
+                        <p className="text-tiny">Quantity: { item.quantity }</p>
+                    </div>
+                  ))}
+                  </div>
+                </div>
+              ) }
+              <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} item={product}/>
         </div>
-            <div className="flex items-center justify-center sticky -bottom-1">
-              <Button color='primary' className="w-full md:w-1/2 lg:w-1/4">
+            <div className="flex items-center justify-center sticky -bottom-1 z-10">
+              <Button color='primary' className="w-full md:w-1/2 lg:w-1/4" onClick={onOpen}>
                 <FaCartShopping />
                 <span>Add to Cart</span>
               </Button>

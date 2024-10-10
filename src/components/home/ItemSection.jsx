@@ -1,118 +1,20 @@
 /* eslint-disable react/prop-types */
 import { dev_url } from "@/utils/axios";
 import { Button, Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsArrowLeftCircle, BsArrowRightCircle, BsHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import {FaCartShopping} from "react-icons/fa6"
 import EmptyItem from "../EmptyItem";
+import useAxiosFetch from "@/hooks/useAxiosFetch";
+import SkeletonLoad from "../SkeletonLoader";
 
 
-const ItemSection = ({name,endpoint,category}) =>
+const ItemSection = ({name,category}) =>
 {
-  const [products,setProducts] = useState([
-    {
-      "id": "b1db35dc-120f-4e1c-ab2d-7086350b84be",
-      "name": "sample",
-      "category": "shoe",
-      "slug": [
-        "test",
-        "food"
-      ],
-      "description": "Sample description",
-      "price": 5000,
-      "dp": "public/images/products/dp-1725311134207-500149979IMG_5700.JPG",
-      "images": [
-        "public/images/products/images-1725311134244-297302577riley2.jpg",
-        "public/images/products/images-1725311134246-403570970Php.JPG",
-        "public/images/products/images-1725311134256-854890221Php.JPG",
-        "public/images/products/images-1725311134260-248726309riley.jpg"
-      ],
-      "color": [],
-      "size": [],
-      "merchant_id": "662dbfd1-b64d-454a-91d3-33e0ab2f104f",
-      "quantity": 5,
-      "discount_type": "flat",
-      "discount_amount": 3000,
-      "opening_date": "2024-09-08",
-      "available_till": 8,
-      "delivery_duration": 3,
-      "dispatch_location": "Lagos sample",
-      "tags": [],
-      "inStock": true,
-      "createdAt": "2024-09-02T21:05:34.376Z",
-      "updatedAt": "2024-09-02T21:05:34.376Z"
-    },
-    {
-      "id": "8c240a09-a216-4315-bb90-17774bc8307f",
-      "name": "test",
-      "category": "sofa",
-      "slug": [
-        "food"
-      ],
-      "description": "Sample",
-      "price": 4000,
-      "dp": "public/images/products/dp-1725394358800-372757769Php.JPG",
-      "images": [
-        "public/images/products/images-1725394359121-877278832MuskTrump.png",
-        "public/images/products/images-1725394359130-286681171riley.jpg",
-        "public/images/products/images-1725394359131-151370950lynn].jpg"
-      ],
-      "color": [],
-      "size": [],
-      "merchant_id": "662dbfd1-b64d-454a-91d3-33e0ab2f104f",
-      "quantity": 6,
-      "discount_type": "percentage",
-      "discount_amount": 34,
-      "opening_date": "2024-09-03",
-      "available_till": 6,
-      "delivery_duration": 5,
-      "dispatch_location": "lagos",
-      "tags": [],
-      "inStock": true,
-      "createdAt": "2024-09-03T20:12:39.330Z",
-      "updatedAt": "2024-09-03T20:12:39.330Z"
-    },
-    {
-      "id": "ec75a796-3a8b-4466-a220-809dbfb22f95",
-      "name": "Test",
-      "category": "Food",
-      "slug": [
-        "Pfp",
-        "profile"
-      ],
-      "description": "This is a sample description",
-      "price": 80000,
-      "dp": "public/images/products/dp-1725876553145-869857570Php.JPG",
-      "images": [
-        "public/images/products/images-1725876553162-384979184team.avif",
-        "public/images/products/images-1725876553166-52160226IMG_5730.JPG",
-        "public/images/products/images-1725876553232-883865065lynn].jpg"
-      ],
-      "color": [
-        "#e01b24",
-        "#f8e45c",
-        "#1a5fb4"
-      ],
-      "size": [
-        "s",
-        "m",
-        "xl"
-      ],
-      "merchant_id": "662dbfd1-b64d-454a-91d3-33e0ab2f104f",
-      "quantity": 200,
-      "discount_type": "flat",
-      "discount_amount": 0 ,
-      "opening_date": "2024-10-15",
-      "available_till": 20,
-      "delivery_duration": 5,
-      "dispatch_location": "Lagos Nigeria",
-      "tags": [],
-      "inStock": true,
-      "createdAt": "2024-09-09T10:09:13.430Z",
-      "updatedAt": "2024-09-09T10:09:13.430Z"
-    }
-  ] )
+  const [ products, setProducts ] = useState( [] )
+  const [ loading, setLoading ] = useState( true );
+  const {fetchData} = useAxiosFetch()
   
   const scrollRef = useRef()
   const scroll = (direction) => {
@@ -125,13 +27,47 @@ const ItemSection = ({name,endpoint,category}) =>
       })
     }
   }
+
+  useEffect( () =>
+  {
+    ( async () =>
+    {
+      try {
+        const res = await fetchData( false, `/product/category?category=${ category }` );
+        setProducts( res.data.products );
+      } catch (error) {
+        console.error(error);
+      }finally{
+        setLoading(false)
+      }
+    })()
+  },[category,fetchData])
   return (
     <div className="my-4">
       <div className="flex justify-between items-center">
-        <p className="text-lg font-bold text-primary capitalize">{name}</p>
+        <p className="text-lg font-bold text-primary capitalize">{ name }</p>
         <Link to={`/product?category=${category}`} className="text-tiny md:text-small underline underline-offset-2 capitalize">see more</Link>
       </div>
-      { products.length > 0 ? (
+      { loading && products.length === 0 && (
+          <div className="flex gap-4 relative">
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+            <SkeletonLoad />
+          </div>
+      ) }
+      {!loading && products.length === 0 && (
+          <div className="h-20 border rounded-md">
+            <EmptyItem message="No product at this time"/>
+          </div>
+      )}
+      { products.length > 0 && !loading && (
         <div className="flex gap-4 relative">
         <button onClick={() => scroll("left")} className={products.length > 2 ? 'absolute top-1/2 z-10 left-0  hover:text-white rounded-full  me-2 bg-white text-primary hover:bg-primary' : "hidden"} >
           <BsArrowLeftCircle size={36}/>
@@ -157,7 +93,7 @@ const ItemSection = ({name,endpoint,category}) =>
                     
                     <p className='text-primary font-bold text-sall'>
                       <span className={ product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ product.price }</span>
-                      <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${product.price - product.discount_amount}`: `₦${(product.discount_amount*product.price)/100}` }</span>
+                      <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${product.price - product.discount_amount}`: `₦${product.price - ((product.discount_amount*product.price)/100)}` }</span>
                     </p>
                   </Link>
                 </div>
@@ -186,11 +122,7 @@ const ItemSection = ({name,endpoint,category}) =>
           <BsArrowRightCircle size={36}/>
         </button>
       </div>
-      ) : (
-          <div className="h-20">
-            <EmptyItem name="product"/>
-          </div>
-      )}
+      ) }
     </div>
   )
 }

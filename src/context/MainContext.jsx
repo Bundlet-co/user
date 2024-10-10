@@ -68,7 +68,6 @@ export const MainProvider = ( { children } ) =>
   const [timeInSec,setTimeInSec] = useState(0)
   const [ categories, setCategories ] = useState( [] )
   const [ wishlists, setWishlists ] = useState( JSON.parse(localStorage.getItem('wishlists')) || [] );
-  const [ carts, setCarts ] = useState( JSON.parse( localStorage.getItem( "carts" ) ) || [] );
   const handleChange = (e) =>
   {
     const { name, value } = e.target;
@@ -216,6 +215,7 @@ const closeToast = () =>
             const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: newList } )
             openToast( res.message, "success" );
             setWishlists( res.data.products );
+            localStorage.setItem( "wishlists", JSON.stringify( [ ] ) );
           } catch ( error ) {
             console.error(error);
             openToast("Error Occured","error")
@@ -237,6 +237,54 @@ const closeToast = () =>
       }
     }
   }
+
+  const removeFromWishlist = async (id="") =>
+  {
+    if ( !user.id ) {
+      const isExist = wishlists.some( item => item === id )
+      if ( isExist ) {
+        const newList = wishlists.filter(item=> item !== id)
+        setWishlists( newList );
+        localStorage.setItem( "wishlists", JSON.stringify( newList ) );
+        openToast( "Removed from favorite", "success" );
+      } else {
+        openToast( "Item not in Wishlist","info" );
+      }
+    } else {
+      const local = JSON.parse( localStorage.getItem( 'wishlists' ) ) || [];
+      if ( local.length !== 0 ) {
+        const exist = local.some( item => item === id )
+        if ( !exist ) {
+          const newList = local.filter(item=> item!== id)
+          try {
+            const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: newList } )
+            await fetchData(true,)
+            openToast( res.message, "success" );
+            setWishlists( res.data.products );
+          } catch ( error ) {
+            console.error(error);
+            openToast("Error Occured","error")
+          }
+        } else {
+          try{
+          const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: local } )
+            openToast( res.message, "success" );
+            setWishlists( res.data.products );
+          } catch ( error ) {
+            console.error(error);
+            openToast("Error Occured","error")
+          }
+        }
+      } else {
+        const res = await fetchData( true, '/wishlist', "POST", {product_id:id} )
+        openToast( res.message, "success" );
+        setWishlists( res.data.products );
+      }
+    }
+  }
+
+
+
 
 
   useEffect( () =>

@@ -13,6 +13,7 @@ import Cart from "@/pages/Cart";
 import Wishlist from "@/pages/Wishlist";
 import Missing from "./pages/Missing";
 import Profile from "./pages/Profile";
+import { CartProvider } from "./context/CartContext";
 
 
 const App = () => {
@@ -20,7 +21,9 @@ const App = () => {
     <Routes>
       <Route path="/" element={
         <MainProvider>
-          <Layout />
+          <CartProvider>
+            <Layout />
+          </CartProvider>
         </MainProvider> }
       >
         <Route index element={ <Home /> } />
