@@ -1,8 +1,11 @@
+import Desktop from "@/components/profile/Desktop";
 
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <div className="h-full">
+      <Desktop/>
+    </div>
   )
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import useAxiosFetch from '@/hooks/useAxiosFetch';
 import { EMAIL_REGEX, PWD_REGEX } from "@/constant";
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
@@ -42,7 +42,11 @@ const MainContext = createContext( {
   verifyCode:async()=>{},
   categories: [],
   wishlists: [],
-  addToWishlist: async()=>{}
+  // eslint-disable-next-line no-unused-vars
+  addToWishlist: async ( id = "" ) => { },
+  // eslint-disable-next-line no-unused-vars
+  removeFromWishlist: async ( id = "" ) => { },
+  deleteAll:()=>{},
 } )
 
 export const MainProvider = ( { children } ) =>
@@ -153,13 +157,13 @@ const closeToast = () =>
     setStatus("")
   }
 
-  const openToast = (message="",status="default") =>
+  const openToast = useCallback((message="",status="default") =>
   {
     
     setToastMsg( message ),
     setStatus( status );
     setShow( true )
-  }
+  },[])
 
   const resendOtp = async () =>
   {
@@ -193,95 +197,94 @@ const closeToast = () =>
 
 
   //Wishlist functionallity
-  const addToWishlist = async (id="") =>
+  const addToWishlist = async (product_id="") =>
   {
-    if ( !user.id ) {
-      const isExist = wishlists.some( item => item === id )
+    if ( !user.accessToken ) {
+      const isExist = wishlists.some( item => item.product_id === product_id )
       if ( !isExist ) {
-        const newList = [ ...wishlists, id ];
+        const newList = [ ...wishlists, { product_id, inWishlist:true} ];
         setWishlists( newList );
         localStorage.setItem( "wishlists", JSON.stringify( newList ) );
-        openToast( "Added to favorite", "success" );
+        openToast( "Item added to Favorite", "success" );
       } else {
         openToast( "Already in favorite","info" );
       }
     } else {
-      const local = JSON.parse( localStorage.getItem( 'wishlists' ) ) || [];
-      if ( local.length !== 0 ) {
-        const exist = local.some( item => item === id )
-        if ( !exist ) {
-          const newList = [ ...local, id ];
-          try {
-            const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: newList } )
-            openToast( res.message, "success" );
-            setWishlists( res.data.products );
-            localStorage.setItem( "wishlists", JSON.stringify( [ ] ) );
-          } catch ( error ) {
-            console.error(error);
-            openToast("Error Occured","error")
-          }
-        } else {
-          try{
-          const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: local } )
-            openToast( res.message, "success" );
-            setWishlists( res.data.products );
-          } catch ( error ) {
-            console.error(error);
-            openToast("Error Occured","error")
-          }
-        }
+      if ( wishlists.length > 0 && localStorage.getItem( "wishlists" ) !== null ) {
+        console.log({ wishlist: [ ...wishlists, product_id ] });
+        await fetchData( true, '/wishlist/add', "post", { wishlist: [ ...wishlists, {product_id ,inWishlist:true}] } );
+        setWishlists( [...wishlists,{product_id,inWishlist:true}] )
+        openToast( "Item added to Favorite", "success" );
+        localStorage.removeItem("wishlists")
       } else {
-        const res = await fetchData( true, '/wishlist', "POST", {product_id:id} )
-        openToast( res.message, "success" );
-        setWishlists( res.data.products );
+        const res = await fetchData( true, '/wishlist',"post", { product_id } )
+        setWishlists( [ ...wishlists, { ...res.data.wishlist, inWishlist: true } ] );
+        openToast( "Item added to Favorite", "success" );
       }
     }
   }
 
-  const removeFromWishlist = async (id="") =>
+  const removeFromWishlist = async (product_id="") =>
   {
-    if ( !user.id ) {
-      const isExist = wishlists.some( item => item === id )
-      if ( isExist ) {
-        const newList = wishlists.filter(item=> item !== id)
-        setWishlists( newList );
-        localStorage.setItem( "wishlists", JSON.stringify( newList ) );
-        openToast( "Removed from favorite", "success" );
+    if ( !user.accessToken ) {
+      const isExist = wishlists.some( item => item.product_id === product_id )
+      if ( !isExist ) {
+        openToast( "Item not found in favourite", "success" );
       } else {
-        openToast( "Item not in Wishlist","info" );
+        const updated = wishlists.filter( item => item.product_id !== product_id );
+        localStorage.setItem( "wishlists", JSON.stringify( updated ) );
+        setWishlists( updated )
+        openToast( "Item removed to Favorite", "success" );
       }
     } else {
-      const local = JSON.parse( localStorage.getItem( 'wishlists' ) ) || [];
-      if ( local.length !== 0 ) {
-        const exist = local.some( item => item === id )
-        if ( !exist ) {
-          const newList = local.filter(item=> item!== id)
-          try {
-            const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: newList } )
-            await fetchData(true,)
-            openToast( res.message, "success" );
-            setWishlists( res.data.products );
-          } catch ( error ) {
-            console.error(error);
-            openToast("Error Occured","error")
-          }
-        } else {
-          try{
-          const res = await fetchData( true, '/wishlist/add', "POST", { wishlist: local } )
-            openToast( res.message, "success" );
-            setWishlists( res.data.products );
-          } catch ( error ) {
-            console.error(error);
-            openToast("Error Occured","error")
-          }
-        }
-      } else {
-        const res = await fetchData( true, '/wishlist', "POST", {product_id:id} )
-        openToast( res.message, "success" );
-        setWishlists( res.data.products );
-      }
+      await fetchData( true, `/wishlist/${ product_id }`, "delete" );
+      const updated = wishlists.filter( item => item.product_id !== product_id );
+      setWishlists( updated )
+      openToast( "Item removed to Favorite", "success" );
     }
   }
+
+
+  const deleteAll = async () =>
+  {
+    if ( user && user.accessToken ) {
+      await fetchData( true, '/wishlist', 'delete' )
+      setWishlists([]);
+    } else {
+      localStorage.removeItem( "wishlists" );
+      setWishlists( [] );
+
+    }
+  }
+
+
+  useEffect( () =>
+  {
+    const getWishLists = async () =>
+    {
+      try {
+        const res = await fetchData( true, '/wishlist', "get" );
+        const result = res.data.products
+        const tempList = [ ...wishlists ];
+
+        result.forEach( ( item ) =>
+        {
+          const existingIndex = tempList.findIndex( itemList => item.product_id === itemList.product_id );
+          if (existingIndex === -1) {
+            // Only push if item does not already exist
+            tempList.push({ ...item, inWishlist: true });
+          }
+        } )
+        
+        setWishlists(tempList)
+
+      } catch (error) {
+        console.error("Error fetching wishlist data:", error);
+      }
+    }
+    if ( user?.accessToken ) getWishLists();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[fetchData,user])
 
 
 
@@ -307,7 +310,7 @@ const closeToast = () =>
     } )()
   },[fetchData] )
   return (
-    <MainContext.Provider value={ {formData,persist,setPersist,handleChange,isLoading,show,status,toastMsg,openToast,closeToast,loginSubmit,user,setUser,registerSubmit,resendOtp,verifyCode,timeInSec,categories} }>
+    <MainContext.Provider value={ {formData,persist,setPersist,handleChange,isLoading,show,status,toastMsg,openToast,closeToast,loginSubmit,user,setUser,registerSubmit,resendOtp,verifyCode,timeInSec,categories,removeFromWishlist,addToWishlist,wishlists,deleteAll} }>
       {children}
     </MainContext.Provider>
   )

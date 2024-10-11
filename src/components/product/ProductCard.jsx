@@ -1,14 +1,19 @@
 /* eslint-disable react/prop-types */
-import { Button, Card, CardBody, CardFooter, Image } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, Image, useDisclosure } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
 import { FaCartShopping } from 'react-icons/fa6';
 import { BsHeart } from 'react-icons/bs';
+import AddToCartModal from "@/components/product/AddToCartModal";
+import useMainContext from '@/hooks/useMainContext';
 
 const ProductCard = ( { product, dev_url } ) =>
 {
-  console.log(product);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { addToWishlist, removeFromWishlist, wishlists } = useMainContext();
+  const wishlist = wishlists.find( wishlist => wishlist.product_id === product.id )||{product_id:product.id,inWishlist:false};
+  
   return (
-    <Card key={product.id} shadow='sm' className='relative me-4 flex-none'>
+    <Card shadow='sm' className='relative me-4 flex-none'>
       <Link to={`/product/${product.id}`}>
         <CardBody>
           <Image
@@ -31,21 +36,22 @@ const ProductCard = ( { product, dev_url } ) =>
           </Link>
         </div>
         <div className="w-full flex justify-center my-2 item-center">
-          <Button size="sm" color='primary'>
+          <Button size="sm" color='primary' onClick={onOpen}>
             <FaCartShopping />
             <span>Add to Cart</span>
           </Button>
         </div>
       </CardFooter>
         
-      <div role='button' className="absolute z-10 flex justify-center items-center bg-white right-5 top-5 rounded-full p-2 w-12 h-12 md:p-2">
+      <div role='button' className={wishlist.inWishlist?"absolute z-10 flex justify-center items-center bg-primary text-white right-5 top-5 rounded-full p-2 w-12 h-12 md:p-2":"absolute z-10 flex justify-center items-center bg-white text-primary right-5 top-5 rounded-full p-2 w-12 h-12 md:p-2"} onClick={wishlist.inWishlist?()=>removeFromWishlist(product.id):()=>addToWishlist(product.id)}>
         <BsHeart size={24}/>
       </div>
       { product.discount_amount ? (
         <div className="absolute z-10 flex justify-center items-center left-2 bg-danger-400 text-neutral-100 top-2 rounded-lg p-2 md:p-2">
           <p className="text-[10px]">- {product.discount_type.toLowerCase() === "flat" ? `₦${product.discount_amount}` : `${product.discount_amount}%`}</p>
         </div>
-      ): null}
+      ) : null }
+      <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} item={product}/>
     </Card>
   )
 }
