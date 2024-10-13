@@ -32,6 +32,10 @@ const Nav = () =>
 {
   const { user } = useMainContext();
   const logout = useLogout();
+const getInitials = (str) =>{
+  	if(typeof str !== "string" || str.trim().length===0) return "";
+  	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
+  }
   return (
     <nav className="hidden md:block">
       <Navbar isBlurred isBordered maxWidth="full" className="lg:container w-full mx-auto">
@@ -76,7 +80,7 @@ const Nav = () =>
               <Avatar
                 as="button"
                 className="transition-transform"
-                name={user.name.split(' ').map(word=> word[0].toUpperCase()).join('')}
+                name={getInitials(user.name)}
                 size="sm"
               />
             </DropdownTrigger>
