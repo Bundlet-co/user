@@ -145,10 +145,10 @@ const SingleProduct = () =>
               { product.suplementryProducts.length > 0 && (
                 <div>
                   <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Suplementry Products</p>
-                  <div className="grid grid-cols-5 md:grid-cols-10 gap-4">
+                  <div className="grid grid-cols-4 md:grid-cols-10 gap-4">
                     { product.suplementryProducts.map( item => (
-                      <div key={ item.id } className="col-span-1 border rounded-2xl p-2 shadow">
-                        <Image src={ `${ dev_url }/${ item.dp.replace( "public/", "" ) }` } className=" w-32 h-24 object-contain border mb-4" />
+                      <div key={ item.id } className="col-span-2 border rounded-2xl p-2 shadow">
+                        <Image src={ `${ dev_url }/${ item.dp.replace( "public/", "" ) }` } className=" w-40 h-24 object-contain border mb-4" />
                         <p className="capitalize text-small font-semibold">{ item.name }</p>
                         <p className="text-tiny my-2">Price: ₦{ item.price }</p>
                         <p className="text-tiny">Quantity: { item.quantity }</p>
@@ -157,7 +157,7 @@ const SingleProduct = () =>
                   </div>
                 </div>
               ) }
-              <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} item={product}/>
+              <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} product={product}/>
         </div>
             <div className="flex items-center justify-center sticky -bottom-1 z-10">
               <Button color='primary' className="w-full md:w-1/2 lg:w-1/4" onClick={onOpen}>

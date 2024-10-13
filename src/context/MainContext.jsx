@@ -91,7 +91,6 @@ export const MainProvider = ( { children } ) =>
         }
       } )
       setUser( res.data.user );
-      console.log(res.data.user);
       setToastMsg(res.message)
       openToast( res.message, "success" );
       navigate( from );
