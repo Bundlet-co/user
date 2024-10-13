@@ -2,14 +2,14 @@
 import { PRODUCT } from "@/constant";
 import useCartContext from "@/hooks/useCartContext";
 import { dev_url } from "@/utils/axios";
-import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter,ModalHeader } from "@nextui-org/react";
+import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter,ModalHeader, Spinner } from "@nextui-org/react";
 import { useState } from "react";
 import { /* BsDash, */ BsDash, BsPlus } from "react-icons/bs";
 
 
 const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = PRODUCT } ) =>
 {
-  const { addToCart,carts,handleDecrement,handleIncrement } = useCartContext();
+  const { addToCart,carts,handleDecrement,handleIncrement,loading } = useCartContext();
   const [ suplementryProducts, setSuplementryProducts ] = useState( [] );
 
   const addSuplementryProduct = ( sup ) =>
@@ -63,11 +63,11 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
                         <Button
                           size="sm"
                           color="default"
-                          onClick={() => handleDecrement({ id: isVariantInCart.id || product.id, variant: variattion.varian })}
+                          onClick={() => handleDecrement({ id: isVariantInCart.id || product.id, variant: variattion.variant })}
                         >
                           <BsDash />
                         </Button>
-                        <p>{isVariantInCart.quantity}</p>
+                        {loading?(<Spinner size="sm"/>) :( <p>{isVariantInCart.quantity}</p>)}
                         <Button
                           size="sm"
                           color="default"

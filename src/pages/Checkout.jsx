@@ -1,11 +1,12 @@
+import EditModal from "@/components/profile/EditModal";
 import { CARTITEM, PRODUCT } from "@/constant";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
 import useMainContext from "@/hooks/useMainContext";
 import { dev_url } from "@/utils/axios";
-import { Button, Image } from "@nextui-org/react";
+import { Button, Image, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaCartShopping, FaPencil } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () =>
@@ -13,9 +14,23 @@ const Checkout = () =>
   const { carts, cartTax, cartSubTotal, cartTotal,deleteAll } = useCartContext()
   const [ cartItems, setCartItems ] = useState( [ { ...CARTITEM, product: { ...PRODUCT } } ] );
   const { user,openToast } = useMainContext();
-  const { fetchData,loading } = useAxiosFetch();
+  const { fetchData, loading } = useAxiosFetch();
+  const [isDisabled,setisDisabled] = useState((user.address && user.address.location) ? false : true)
 
   const navigate = useNavigate();
+
+  const [ isEdit, setIsEdit ] = useState( false );
+  const { isOpen, onOpenChange, onOpen,onClose } = useDisclosure();
+  const toggleEdit = () =>
+  {
+    if ( !isEdit ) {
+      setIsEdit( !isEdit );
+      onOpen();
+    } else {
+      setIsEdit( !isEdit );
+      onClose();
+    }
+  }
 
   useEffect( () =>
   {
@@ -57,11 +72,23 @@ const Checkout = () =>
     }
   }
 
+  useEffect( () =>
+  {
+    if(user.address && user.address.location) return setisDisabled(false)
+  },[user.address])
+
   return (
     <div className="h-full">
       <p className="text-lg md:text-xl text-primary py-2 font-extrabold col-span-full h-fit">Review Order</p>
       <section className="h-full flex flex-col lg:grid lg:grid-cols-5 lg:gap-4">
         <div className="col-span-3 p-4 lg:max-h-full overflow-y-auto border rounded-md  lg:h-fit">
+          { !user.address && ( <p>Add an address</p> ) }
+          {user.address && (
+            <div className="lg:hidden w-full mb-4 border-b-1">
+              <p className="text-medium font-bold">Address Information</p>
+              <p className="text-small">{ user.address.location }, { user.address.city }, { user.address.state }, { user.address.country }</p>
+            </div>
+          )}
           { cartItems.map( cart => (
             <div className="flex space-x-2 items-center flex-grow" key={ cart.id ? cart.id : cartItems.indexOf( cart ) + 1 } >
               <p className="text-lg font-bold">{ cartItems.indexOf( cart ) + 1 }.</p>
@@ -102,11 +129,20 @@ const Checkout = () =>
         </div>
         
         <div className="sticky mx-auto w-full flex justify-between items-center border-t-1 p-2 lg:flex-col border lg:col-span-2 h-fit lg:h-64 lg:items-start mt-2 lg:mt-0 rounded-s-md">
-          <div className="hidden lg:block w-full">
-            <p className="text-lg font-bold">Address Information</p>
-            <hr />
-            <p>{ user.address.location }, { user.address.city }, { user.address.state }, { user.address.country }</p>
-          </div>
+          { !user.address && ( 
+            <div>
+              <p>Add an address</p>
+              <Button color="default" className="flex" onClick={toggleEdit}><FaPencil/> <span className="hidden lg:block">Edit profile</span></Button>
+            </div>
+          ) }
+          {user.address && (
+            <div className="hidden lg:block w-full">
+              
+              <p className="text-lg font-bold">Address Information</p>
+              <hr />
+              <p>{ user.address.location }, { user.address.city }, { user.address.state }, { user.address.country }</p>
+            </div>
+          )}
           <hr className="hidden lg:block w-full"/>
           <div className="lg:w-full">
             <div>
@@ -119,11 +155,12 @@ const Checkout = () =>
               <p className="text-tiny md:text-small text-end lg:text-lg font-bold">Total: <span className="font-normal">₦{ cartTotal }</span></p>
             </div>
           </div>
-          <Button radius="full" color="primary" className="flex space-x-2 w-1/2 lg:w-full" onClick={checkOut} isLoading={loading} isDisabled={loading}>
+          <Button radius="full" color="primary" className="flex space-x-2 w-1/2 lg:w-full" onClick={checkOut} isLoading={loading} isDisabled={isDisabled}>
             <FaCartShopping />
             <p>Checkout</p>
           </Button>
         </div>
+        <EditModal isOpen={ isOpen } onOpenChange={ onOpenChange } closeToggle={toggleEdit}/>
       </section>
     </div>
   )

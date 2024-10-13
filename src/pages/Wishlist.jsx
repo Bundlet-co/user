@@ -7,11 +7,12 @@ import ProductCard from "@/components/product/ProductCard";
 import { dev_url } from "@/utils/axios";
 import { Button } from "@nextui-org/react";
 import { FaTrashCan } from "react-icons/fa6";
+import SkeletonLoad from "@/components/SkeletonLoader";
 
 const Wishlist = () =>
 {
   const { wishlists,deleteAll } = useMainContext();
-  const {fetchData} = useAxiosFetch()
+  const {fetchData,loading} = useAxiosFetch()
   const [ wishlistItems, setWishlistItems ] = useState( [] )
 
   useEffect( () =>
@@ -37,9 +38,27 @@ const Wishlist = () =>
 
 
   return (
-    wishlists.length <= 0 ? (
-      <EmptyItem message="Your wishlist is empty"/>
-    ) : (
+    <div className="h-full">
+      { loading && wishlistItems.length < 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+          <SkeletonLoad/>
+        </div>
+      ) }
+      { !loading && wishlistItems.length <= 0 && (
+        <EmptyItem message="Your wishlist is empty"/>
+      )}
+      
+      {!loading && wishlistItems.length > 0 &&  (
         <section className="h-full">
           <div className="flex items-center justify-between">
             <p className="text-lg md:text-xl text-primary py-2 font-extrabold">My Wishlist</p>
@@ -51,8 +70,10 @@ const Wishlist = () =>
             ))}
           </div>
         </section>
-    )
-  )
+  )}
+    </div>)
 }
 
-export default Wishlist
+export default Wishlist;
+
+

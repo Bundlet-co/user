@@ -316,3 +316,66 @@ export const countries = [
 ];
 
 
+
+export const ORDER= {
+  "id": "",
+  "userId": "",
+  "netAmount": "",
+  "address": "",
+  "status": "",
+  "createdAt": "",
+  "updatedAt": "",
+  "products": [
+    {
+      "id": "",
+      "orderId": "",
+      "productId": "",
+      "price": 0,
+      "status": "PENDING",
+      "quantity": 0,
+      "variation": {
+        "type": "",
+        "price": 0,
+        "variant": "",
+        "quantity": ""
+      },
+      "createdAt": "",
+      "updatedAt": "",
+      "product": {
+        "id": "",
+        "name": "",
+        "category": "",
+        "slug": [
+          "",
+        ],
+        "description": "",
+        "price": 0,
+        "dp": "",
+        "images": [
+          "",
+        ],
+        "variation": [
+          {
+            "type": "",
+            "price": "0",
+            "variant": "",
+            "quantity": ""
+          },
+        ],
+        "merchant_id": "",
+        "quantity": 0,
+        "discount_type": "",
+        "discount_amount": 0,
+        "opening_date": "",
+        "available_till": 0,
+        "delivery_duration": 0,
+        "dispatch_location": "",
+        "unit": "",
+        "product_type": "",
+        "inStock": true,
+        "createdAt": "",
+        "updatedAt": ""
+      }
+    }
+  ],
+}

@@ -1,3 +1,4 @@
+import CartLoader from "@/components/animations/CartLoader";
 import EmptyItem from "@/components/EmptyItem";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
@@ -14,6 +15,7 @@ const Cart = () =>
   const { carts, cartSubTotal,deleteItem,handleDecrement,handleIncrement,deleteAll } = useCartContext()
   const [ cartItems, setCartItems ] = useState( [] );
   const { fetchData } = useAxiosFetch();
+  const [isLoading,setIsLoading] = useState(true)
 
   const navigate = useNavigate();
 
@@ -37,6 +39,8 @@ const Cart = () =>
         setCartItems( data );
       } catch ( error ) {
         console.error( error );
+      } finally {
+        setIsLoading(false)
       }
     } )();
   }, [ carts, fetchData ] );
@@ -45,9 +49,25 @@ const Cart = () =>
 
 
   return (
-    cartItems.length <= 0 ? (
+    <div className="h-full">
+      {cartItems.length <= 0 && isLoading && (
+        <div>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+          <CartLoader/>
+        </div>
+      ) }
+      {    cartItems.length <= 0 && !isLoading && (
       <EmptyItem message="Your cart is empty!!!"/>
-    ) : (
+      ) }
+      {cartItems.length >0 && !isLoading && (
         <section className="h-full flex flex-col">
           <div className="flex items-center justify-between">
             <p className="text-lg md:text-xl text-primary py-2 font-extrabold">My Cart</p>
@@ -106,7 +126,8 @@ const Cart = () =>
             </Button>
           </div>
       </section>
-    )
+    )}
+    </div>
   )
 }
 

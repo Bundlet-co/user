@@ -12,6 +12,7 @@ const CartContext = createContext( {
   cartTotal: 0,
   cartTax: 0,
   count: 0,
+  loading:false,
   addToCart: async ( product = CARTITEM, selectedVariation, supplementaryProducts ) => { },
   handleIncrement: ( {id="",variant=''} ) => { },
   handleDecrement: ( {id="",variant=''} ) => { },
@@ -35,10 +36,12 @@ export const CartProvider = ( { children } ) =>
   const [ cartTotal, setCartTotal ] = useState( 0 );
   const [ cartTax, setCartTax ] = useState( 0 );
   const [ count, setCount ] = useState( 0 );
+  const [loading,setLoading] = useState(false)
 
 
   const addToCart = async( product = PRODUCT, selectedVariation, supplementaryProducts ) =>
   {
+    setLoading(true)
     let itemPrice = parseFloat( selectedVariation.price );
     
     if(product.discount_type.toLowerCase() === "flat"){
@@ -79,7 +82,6 @@ export const CartProvider = ( { children } ) =>
     price:itemPrice,
     total:totalCost,
     };
-    console.log(cartItem);
       const addItemToState = ( item=CARTITEM ) =>
     {
       const existItemIndex = carts.findIndex( ( cartItem ) => cartItem.productId === item.productId && item.variation.variant === cartItem.variation.variant );
@@ -98,6 +100,7 @@ export const CartProvider = ( { children } ) =>
       const newItem = [...carts,data]
       localStorage.setItem( "carts", JSON.stringify( newItem ) );
       openToast( "Item added to cart", "success" );
+      setLoading(false)
     } else {
       try {
       if ( carts.length > 0 && localStorage.getItem("carts") !== null ) {
@@ -123,12 +126,16 @@ export const CartProvider = ( { children } ) =>
       }} catch (error) {
           console.error( error );
           openToast(error.message,"error")
-        }
+      }
+      finally {
+        setLoading(false)
+      }
     }
   }
 
   const handleIncrement = async( {id,variant}  ) =>
   {
+    setLoading(true)
     let tempcart = [...carts]
     const index = !user.accessToken ? tempcart.findIndex( item => item.productId === id && item.variation.variant === variant ) : tempcart.findIndex( item => item.id === id && item.variation.variant === variant ); 
     if ( index === -1 ) return;
@@ -140,16 +147,19 @@ export const CartProvider = ( { children } ) =>
     if (user && user.accessToken) {
       await updateCartItem( id, product.quantity, product.total );
       setCarts( tempcart )
-      openToast("Item quantity updated in the cart", "success");
+      openToast( "Item quantity updated in the cart", "success" );
+      setLoading(false)
     } else {
       // Save updated cart in local storage
       localStorage.setItem( "carts", JSON.stringify( tempcart ) );
       setCarts( tempcart )
+      setLoading(false)
     }
 }
 
   const handleDecrement =async ({id,variant}  ) =>
   {
+    setLoading(true)
     let tempcart = [...carts]
     const index = !user.accessToken ? tempcart.findIndex( item => item.productId === id && item.variation.variant === variant ) : tempcart.findIndex( item => item.id === id && item.variation.variant === variant ); 
     
@@ -165,11 +175,13 @@ export const CartProvider = ( { children } ) =>
       if (user && user.accessToken) {
         await updateCartItem( id, product.quantity, product.total );
         setCarts( tempcart )
-        openToast("Item quantity updated in the cart", "success");
+        openToast( "Item quantity updated in the cart", "success" );
+        setLoading(false)
       } else {
         // Save updated cart in local storage
         localStorage.setItem( "carts", JSON.stringify( tempcart ) );
         setCarts( tempcart );
+        setLoading(false)
       }
     }
   }
@@ -194,34 +206,41 @@ export const CartProvider = ( { children } ) =>
 
   const deleteItem = async ( {id,variant} ) =>
   {
+    setLoading(true)
     if ( user && user.accessToken ) {
       try {
         await fetchData( true, `/cart/${ id }`, "delete" );
         const updateCart = carts.filter( item => item.id !== id );
         setCarts( updateCart )
-        openToast("Item removed from cart", "success");
+        openToast( "Item removed from cart", "success" );
       } catch (error) {
         console.error("Error removing cart item:", error);
         openToast("Failed to remove item from cart", "error");
+      } finally {
+        setLoading(false)
       }
     } else {
       const updatedCarts = carts.filter( item =>!(item.productId === id && item.variation.variant === variant) );
       console.log(updatedCarts);
       setCarts(updatedCarts);
       localStorage.setItem("carts", JSON.stringify(updatedCarts));
-      openToast("Item removed from cart", "success");
+      openToast( "Item removed from cart", "success" );
+      setLoading(false)
     }
   }
 
 
   const deleteAll = async () =>
   {
+    setLoading(true)
     if ( user && user.accessToken ) {
       await fetchData( true, '/cart', 'delete' )
-      setCarts([]);
+      setCarts( [] );
+      setLoading(false)
     } else {
       localStorage.removeItem( "carts" );
       setCarts( [] );
+      setLoading(false)
 
     }
   }
@@ -284,7 +303,7 @@ export const CartProvider = ( { children } ) =>
   },[fetchData,updateCartItem,user])
 
   return (
-    <CartContext.Provider value={ {count,carts,cartSubTotal,cartTax,cartTotal,addToCart,handleDecrement,handleIncrement,deleteAll,deleteItem} }>
+    <CartContext.Provider value={ {count,carts,cartSubTotal,cartTax,cartTotal,addToCart,handleDecrement,handleIncrement,deleteAll,deleteItem,loading} }>
       {children}
     </CartContext.Provider>
   )
