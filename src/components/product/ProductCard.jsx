@@ -51,7 +51,7 @@ const ProductCard = ( { product, dev_url } ) =>
           <p className="text-[10px]">- {product.discount_type.toLowerCase() === "flat" ? `₦${product.discount_amount}` : `${product.discount_amount}%`}</p>
         </div>
       ) : null }
-      <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} item={product}/>
+      <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} product={product}/>
     </Card>
   )
 }

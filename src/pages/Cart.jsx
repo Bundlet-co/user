@@ -6,13 +6,21 @@ import { Button, Image } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { BsDash, BsHeart, BsPlus } from "react-icons/bs";
 import { FaCartShopping, FaTrashCan } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 
 const Cart = () =>
 {
-  const { carts, cartTax, cartSubTotal, cartTotal,deleteItem,handleDecrement,handleIncrement,deleteAll } = useCartContext()
+  const { carts, cartSubTotal,deleteItem,handleDecrement,handleIncrement,deleteAll } = useCartContext()
   const [ cartItems, setCartItems ] = useState( [] );
   const { fetchData } = useAxiosFetch();
+
+  const navigate = useNavigate();
+
+  const checkoutBtn = () =>
+  {
+    navigate('/checkout')
+  }
 
   useEffect( () =>
   {
@@ -32,7 +40,7 @@ const Cart = () =>
       }
     } )();
   }, [ carts, fetchData ] );
-  console.log(carts);
+
 
 
 
@@ -55,11 +63,16 @@ const Cart = () =>
                   <div className="flex flex-between mb-4">
                     <div className="flex-1">
                       <p className="font-bold md:text-medium lg:text-lg">{ cart.product.name }</p>
-                      <p className="text-small italic hidden lg:block">{ cart.product.description.length > 200 ? `${ cart.product.description.slice( 0, 200 ) }...` : `${ cart.product.description }` }</p>
-                      <p className="text-small italic lg:hidden">{ cart.product.description.length > 50 ? `${ cart.product.description.slice( 0, 50 ) }...` : `${ cart.product.description }` }</p>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-small font-semibold capitalize">{ cart.variation.type }:</p>
+                        <div className="h-6 w-6 rounded-md" style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
+                          {cart.variation.type  !== "color" ? cart.variation.variant : null}
+                        </div>
+                      </div>
                       <p className='text-primary font-bold text-sall'>
-                          <span className={ cart.product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.price }</span>
-                          <span className={!cart.product.discount_amount ? "hidden" : "inline-block"}>{ cart.product.discount_type.toLowerCase() === "flat" ? `₦${cart.price - cart.product.discount_amount}`: `₦${cart.price -((cart.product.discount_amount*cart.price)/100)}` }</span>
+                        <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.product.variation.find(variation => variation.variant === cart.variation.variant)?.price || 0 }</span>
+                        
+                          <span className={!cart.product.discount_amount ? "hidden" : "inline-block"}>&#8358;{ cart.price }</span>
                         </p>
                     </div>
                     <div className="">
@@ -86,14 +99,8 @@ const Cart = () =>
               <div>
                 <p className="text-tiny md:text-small lg:text-medium font-bold">Subtotal: ₦{ cartSubTotal }</p>
               </div>
-              <div>
-                <p className="text-tiny md:text-small lg:text-medium font-bold">VAT: ₦{ cartTax }</p>
-              </div>
-              <div>
-                <p className="text-tiny md:text-small lg:text-medium font-bold">Total: ₦{ cartTotal }</p>
-              </div>
             </div>
-            <Button radius="full" color="primary" className="flex space-x-2 w-1/2">
+            <Button radius="full" color="primary" className="flex space-x-2 w-1/2" onClick={checkoutBtn}>
               <FaCartShopping />
               <p>Checkout</p>
             </Button>

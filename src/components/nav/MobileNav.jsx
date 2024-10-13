@@ -65,27 +65,16 @@ const MobileNav = () =>
 
   const toggleIsOpen = () => setIsOpen( !isOpen );
   const { user } = useMainContext()
-  const logout = useLogout()
+  const logout = useLogout();
+    const getInitials = (str) =>{
+  	if(typeof str !== "string" || str.trim().length===0) return "";
+  	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
+  }
   return (
     <nav className="p-1 px-2 md:hidden">
       <div className="flex items-center justify-center flex-col py-3">
         <Link to="/"><Image src={ logo } alt="Logo" className="w-28" /></Link>
-        <Input
-            classNames={{
-              mainWrapper: "h-full",
-              input: "text-small",
-              inputWrapper: "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20 py-1",
-            }}
-            placeholder="Type to search..."
-            size="sm"
-            variant="bordered"
-            color="primary"
-            endContent={<SearchContent />}
-            type="search"
-          />
-      </div>
-      <hr />
-      <section className="flex justify-between items-center py-2 px-1">
+        <section className="flex justify-between items-center py-3 px-1 w-full">
         
         <div className="">
           <BsList size={20} role="button" onClick={toggleIsOpen}/>
@@ -103,7 +92,7 @@ const MobileNav = () =>
               <Avatar
                 as="button"
                 className="transition-transform"
-                name={user.name.split(' ').map(word=> word[0].toUpperCase()).join('')}
+                name={getInitials(user.name)}
                 size="sm"
               />
             </DropdownTrigger>
@@ -116,7 +105,7 @@ const MobileNav = () =>
                   <Link to="profile">Profile</Link>
                 </DropdownItem>
                 <DropdownItem key="order">
-                  <Link to="profile">Orders</Link>
+                  <Link to="order">Orders</Link>
                 </DropdownItem>
                 <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
                 <DropdownItem key="logout" color="danger" onClick={logout}>
@@ -128,7 +117,24 @@ const MobileNav = () =>
                 <BsPersonCircle size={26} />
             </Link>)}
         </div>
-      </section>
+        </section>
+        <hr />
+        <Input
+            classNames={{
+              mainWrapper: "h-full",
+              input: "text-small",
+              inputWrapper: "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20 py-1",
+            }}
+            placeholder="Type to search..."
+            size="sm"
+            variant="bordered"
+            color="primary"
+            endContent={<SearchContent />}
+            type="search"
+          />
+      </div>
+      
+      
       <Offcanvas isOpen={isOpen} toggleIsOpen={toggleIsOpen}/>
     </nav>
   )

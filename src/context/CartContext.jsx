@@ -39,8 +39,15 @@ export const CartProvider = ( { children } ) =>
 
   const addToCart = async( product = PRODUCT, selectedVariation, supplementaryProducts ) =>
   {
-    const itemPrice = parseFloat( selectedVariation.price );
-    let totalCost = itemPrice
+    let itemPrice = parseFloat( selectedVariation.price );
+    
+    if(product.discount_type.toLowerCase() === "flat"){
+      itemPrice -= product.discount_amount 
+    }
+    if ( product.discount_type.toLowerCase() === "percentage" ) { 
+      itemPrice -= ( itemPrice * product.discount_amount / 100 );
+    }
+    let totalCost = itemPrice;
     let supplementaryCost
     if ( supplementaryProducts.length > 0 ) {
       supplementaryCost = supplementaryProducts.reduce(

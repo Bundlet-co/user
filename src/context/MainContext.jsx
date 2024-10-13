@@ -29,7 +29,10 @@ const MainContext = createContext( {
     name: "",
     email: "",
     phone_number: "",
-    address: "",
+    address: {
+    country: "",
+    state:"",city:"",location:""
+  },
     isVerified: false,
     accessToken:"",
     createdAt:"",
