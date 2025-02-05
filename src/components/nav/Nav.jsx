@@ -93,7 +93,7 @@ const getInitials = (str) =>{
                   <Link to="profile">Profile</Link>
                 </DropdownItem>
                 <DropdownItem key="order">
-                  <Link to="profile">Orders</Link>
+                  <Link to="order">Orders</Link>
                 </DropdownItem>
                 <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
               <DropdownItem key="logout" onClick={logout} color="danger">
