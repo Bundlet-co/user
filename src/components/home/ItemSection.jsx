@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { dev_url } from "@/utils/axios";
 import { useEffect, useRef, useState } from "react";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -74,7 +73,7 @@ const ItemSection = ({name,category}) =>
         <div className="scroll-container relative flex items-center overflow-x-auto p-4" ref={ scrollRef }>
           {
           products.map( product => (
-            <ProductCard key={product.id} product={product} dev_url={dev_url}/>
+            <ProductCard key={product.id} product={product} />
           ))
           }
         </div>

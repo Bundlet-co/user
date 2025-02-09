@@ -6,11 +6,12 @@ import { BsHeart } from 'react-icons/bs';
 import AddToCartModal from "@/components/product/AddToCartModal";
 import useMainContext from '@/hooks/useMainContext';
 
-const ProductCard = ( { product, dev_url } ) =>
+const ProductCard = ( { product } ) =>
 {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { addToWishlist, removeFromWishlist, wishlists } = useMainContext();
   const wishlist = wishlists.find( wishlist => wishlist.product_id === product.id )||{product_id:product.id,inWishlist:false};
+
   
   return (
     <Card shadow='sm' className='relative me-4 flex-none'>
@@ -19,7 +20,7 @@ const ProductCard = ( { product, dev_url } ) =>
           <Image
               radius='lg'
               alt={product.name}
-              src={`${dev_url}/${product.dp}`}
+              src={`${product.dp}`}
               className='object-cover relative z-0 h-[8rem] w-[12rem]'
           />
         </CardBody>
