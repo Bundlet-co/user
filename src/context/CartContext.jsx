@@ -42,7 +42,7 @@ export const CartProvider = ( { children } ) =>
   const addToCart = async( product = PRODUCT, selectedVariation, supplementaryProducts ) =>
   {
     setLoading(true)
-    let itemPrice = parseFloat( selectedVariation.price );
+    let itemPrice = selectedVariation ?parseFloat( selectedVariation.price ) : product.price;
     
     if(product.discount_type.toLowerCase() === "flat"){
       itemPrice -= product.discount_amount 
@@ -52,7 +52,7 @@ export const CartProvider = ( { children } ) =>
     }
     let totalCost = itemPrice;
     let supplementaryCost
-    if ( supplementaryProducts.length > 0 ) {
+    if ( supplementaryProducts.length > 0 && supplementaryProducts ) {
       supplementaryCost = supplementaryProducts.reduce(
       (sum, item) => sum + item.price,
       0
@@ -66,18 +66,18 @@ export const CartProvider = ( { children } ) =>
     id: null, // Server-generated for logged-in users, null for local storage
     productId: product.id,
     name: product.name,
-    variation: {
+    variation: selectedVariation? {
       type: selectedVariation.type,
       variant: selectedVariation.variant,
       price: itemPrice,
       quantity: selectedVariation.quantity,
-    },
-    suplementryProducts: supplementaryProducts.map((item) => ({
+    }:null,
+    suplementryProducts: supplementaryProducts.length > 0 && supplementaryProducts ? supplementaryProducts.map((item) => ({
       id: item.id,
       name: item.name,
       price: item.price,
       quantity: item.quantity,
-    })),
+    })) : null,
     quantity: 1,
     price:itemPrice,
     total:totalCost,
@@ -137,7 +137,7 @@ export const CartProvider = ( { children } ) =>
   {
     setLoading(true)
     let tempcart = [...carts]
-    const index = !user.accessToken ? tempcart.findIndex( item => item.productId === id && item.variation.variant === variant ) : tempcart.findIndex( item => item.id === id && item.variation.variant === variant ); 
+    const index = !user.accessToken ? tempcart.findIndex( item => (item.productId === id && item.variation.variant === variant) || (item.id === id && !item.variation) ) : tempcart.findIndex( item => (item.id === id && item.variation.variant === variant) || (item.id === id && !item.variation) ); 
     if ( index === -1 ) return;
     const product = tempcart[ index ]
     product.quantity++;
@@ -161,7 +161,7 @@ export const CartProvider = ( { children } ) =>
   {
     setLoading(true)
     let tempcart = [...carts]
-    const index = !user.accessToken ? tempcart.findIndex( item => item.productId === id && item.variation.variant === variant ) : tempcart.findIndex( item => item.id === id && item.variation.variant === variant ); 
+    const index = !user.accessToken ? tempcart.findIndex( item => (item.productId === id && item.variation.variant === variant) || (item.id === id && !item.variation) ) : tempcart.findIndex( item => (item.id === id && item.variation.variant === variant) || (item.id === id && !item.variation) ); 
     
     if ( index === -1 ) return;
     const product = {...tempcart[ index ]}

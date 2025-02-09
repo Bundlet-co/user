@@ -5,13 +5,24 @@ import { FaCartShopping } from 'react-icons/fa6';
 import { BsHeart } from 'react-icons/bs';
 import AddToCartModal from "@/components/product/AddToCartModal";
 import useMainContext from '@/hooks/useMainContext';
+import useCartContext from '@/hooks/useCartContext';
 
 const ProductCard = ( { product } ) =>
 {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { addToWishlist, removeFromWishlist, wishlists } = useMainContext();
+  const { addToCart } = useCartContext();
   const wishlist = wishlists.find( wishlist => wishlist.product_id === product.id )||{product_id:product.id,inWishlist:false};
 
+
+  const addItemToCart = () =>
+  {
+    if ( product.variation > 0 ) {
+      onOpen()
+    } else {
+      addToCart(product)
+    }
+  }
   
   return (
     <Card shadow='sm' className='relative me-4 flex-none'>
@@ -37,7 +48,7 @@ const ProductCard = ( { product } ) =>
           </Link>
         </div>
         <div className="w-full flex justify-center my-2 item-center">
-          <Button size="sm" color='primary' onClick={onOpen}>
+          <Button size="sm" color='primary' onClick={addItemToCart}>
             <FaCartShopping />
             <span>Add to Cart</span>
           </Button>
