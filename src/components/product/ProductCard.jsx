@@ -20,7 +20,7 @@ const ProductCard = ( { product } ) =>
     if ( product.variation > 0 ) {
       onOpen()
     } else {
-      addToCart(product)
+      addToCart(product,null,null)
     }
   }
   
@@ -31,7 +31,7 @@ const ProductCard = ( { product } ) =>
           <Image
               radius='lg'
               alt={product.name}
-              src={`${product.dp}`}
+              src={product.dp}
               className='object-cover relative z-0 h-[8rem] w-[12rem]'
           />
         </CardBody>

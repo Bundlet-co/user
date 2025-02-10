@@ -4,16 +4,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-
 import { EffectCoverflow, Pagination,Autoplay } from 'swiper/modules';
 import { Button, Image, Spinner, useDisclosure } from "@nextui-org/react";
-import { dev_url } from "@/utils/axios";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import { FaCartShopping } from "react-icons/fa6";
 import EmptyItem from "@/components/EmptyItem";
 import useMainContext from "@/hooks/useMainContext";
 import AddToCartModal from "@/components/product/AddToCartModal";
 import { PRODUCT } from "@/constant";
+import useCartContext from "@/hooks/useCartContext";
 
 
 const SingleProduct = () =>
@@ -27,12 +26,23 @@ const SingleProduct = () =>
   const [ others, setOthers ] = useState( [ { price: "", quantity: "", type: "", variant: "" } ] );
   const {fetchData} = useAxiosFetch()
   const { openToast } = useMainContext();
+  const {addToCart} = useCartContext()
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   
   const getVariation = ( type = "",variation =[{ price: "", quantity: "", type: "", variant: "" }],setState ) =>
   {
     const variant = variation.filter( item => item.type.toLowerCase() === type.toLowerCase() )
     setState(variant)
+  }
+
+  const addItemToCart = () =>
+  {
+    if ( product.variation > 0 ) {
+      onOpen()
+    } else {
+      addToCart( product, null, null )
+      openToast("Item added to cart","success")
+    }
   }
 
   useState( () =>
@@ -88,7 +98,7 @@ const SingleProduct = () =>
       >
         { carouselImg.map( img => (
           <SwiperSlide key={ carouselImg.indexOf( img ) + 1 } className="h-36 swiper-slide1">
-            <Image src={`${dev_url}/${img.replace("public/","")}` } className="mx-auto object-cover  w-full"/>
+            <Image src={img} className="mx-auto object-cover  w-full"/>
           </SwiperSlide>
         ))}
       </Swiper>
@@ -148,7 +158,7 @@ const SingleProduct = () =>
                   <div className="grid grid-cols-4 md:grid-cols-10 gap-4">
                     { product.suplementryProducts.map( item => (
                       <div key={ item.id } className="col-span-2 border rounded-2xl p-2 shadow">
-                        <Image src={ `${ dev_url }/${ item.dp.replace( "public/", "" ) }` } className=" w-40 h-24 object-contain border mb-4" />
+                        <Image src={item.dp } className=" w-40 h-24 object-contain border mb-4" />
                         <p className="capitalize text-small font-semibold">{ item.name }</p>
                         <p className="text-tiny my-2">Price: ₦{ item.price }</p>
                         <p className="text-tiny">Quantity: { item.quantity }</p>
@@ -160,7 +170,7 @@ const SingleProduct = () =>
               <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} product={product}/>
         </div>
             <div className="flex items-center justify-center sticky -bottom-1 z-10">
-              <Button color='primary' className="w-full md:w-1/2 lg:w-1/4" onClick={onOpen}>
+              <Button color='primary' className="w-full md:w-1/2 lg:w-1/4" onClick={addItemToCart}>
                 <FaCartShopping />
                 <span>Add to Cart</span>
               </Button>

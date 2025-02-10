@@ -41,6 +41,7 @@ export const CartProvider = ( { children } ) =>
 
   const addToCart = async( product = PRODUCT, selectedVariation, supplementaryProducts ) =>
   {
+    console.log(product);
     setLoading(true)
     let itemPrice = selectedVariation ?parseFloat( selectedVariation.price ) : product.price;
     
@@ -51,8 +52,8 @@ export const CartProvider = ( { children } ) =>
       itemPrice -= ( itemPrice * product.discount_amount / 100 );
     }
     let totalCost = itemPrice;
-    let supplementaryCost
-    if ( supplementaryProducts.length > 0 && supplementaryProducts ) {
+    let supplementaryCost;
+    if ( supplementaryProducts !== null && supplementaryProducts.length > 0 ) {
       supplementaryCost = supplementaryProducts.reduce(
       (sum, item) => sum + item.price,
       0
@@ -72,7 +73,7 @@ export const CartProvider = ( { children } ) =>
       price: itemPrice,
       quantity: selectedVariation.quantity,
     }:null,
-    suplementryProducts: supplementaryProducts.length > 0 && supplementaryProducts ? supplementaryProducts.map((item) => ({
+    suplementryProducts: supplementaryProducts !== null && supplementaryProducts.length > 0 ? supplementaryProducts.map((item) => ({
       id: item.id,
       name: item.name,
       price: item.price,
@@ -137,14 +138,19 @@ export const CartProvider = ( { children } ) =>
   {
     setLoading(true)
     let tempcart = [...carts]
-    const index = !user.accessToken ? tempcart.findIndex( item => (item.productId === id && item.variation.variant === variant) || (item.id === id && !item.variation) ) : tempcart.findIndex( item => (item.id === id && item.variation.variant === variant) || (item.id === id && !item.variation) ); 
+    const index = !user.accessToken ? tempcart.findIndex( item => ( item.productId === id && item.variation && item.variation.variant === variant ) || (
+      item.productId === id && !item.variation
+    )) : tempcart.findIndex( item => (item.id === id && item.variation && item.variation.variant === variant )|| (
+      item.id === id && !item.variation
+    )); 
     if ( index === -1 ) return;
     const product = tempcart[ index ]
     product.quantity++;
     product.total = product.quantity * product.price
     tempcart[index] = product
     
-    if (user && user.accessToken) {
+    if ( user && user.accessToken ) {
+      console.log("Testing");
       await updateCartItem( id, product.quantity, product.total );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );
@@ -161,13 +167,17 @@ export const CartProvider = ( { children } ) =>
   {
     setLoading(true)
     let tempcart = [...carts]
-    const index = !user.accessToken ? tempcart.findIndex( item => (item.productId === id && item.variation.variant === variant) || (item.id === id && !item.variation) ) : tempcart.findIndex( item => (item.id === id && item.variation.variant === variant) || (item.id === id && !item.variation) ); 
+    const index = !user.accessToken ? tempcart.findIndex( item => ( item.productId === id  && item.variation && item.variation.variant === variant ) || (
+      item.productId === id && !item.variation
+    )) : tempcart.findIndex( item => (item.id === id && item.variation && item.variation.variant === variant )|| (
+      item.id === id && !item.variation
+    )); 
     
     if ( index === -1 ) return;
     const product = {...tempcart[ index ]}
     product.quantity--;
     if ( product.quantity === 0 ) {
-      await deleteItem({id,variant})
+      return await deleteItem( { id, variant } );
     } else {
       product.total = product.quantity * product.price;
       tempcart[index] = product;
@@ -220,7 +230,7 @@ export const CartProvider = ( { children } ) =>
         setLoading(false)
       }
     } else {
-      const updatedCarts = carts.filter( item =>!(item.productId === id && item.variation.variant === variant) );
+      const updatedCarts = carts.filter( item => ( item.productId !== id  && item.variation && item.variation.variant !== variant ) && (item.productId !== id  && !item.variation))
       console.log(updatedCarts);
       setCarts(updatedCarts);
       localStorage.setItem("carts", JSON.stringify(updatedCarts));

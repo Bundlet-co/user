@@ -5,7 +5,6 @@ import {Autoplay} from 'swiper/modules'
 import { useEffect, useState } from 'react';
 import useAxiosFetch from '@/hooks/useAxiosFetch';
 import { Button, Image } from '@nextui-org/react';
-import { dev_url } from '@/utils/axios';
 import { BsStarFill } from 'react-icons/bs';
 
 //&#8358;
@@ -16,7 +15,7 @@ const Item = ({carousel,phrase,buyWords}) =>
       <Image
         radius='lg'
         alt={carousel.name}
-        src={`${dev_url}/${carousel.dp.replace('public/','')}`}
+        src={carousel.dp}
         className='object-cover w-[10rem] h-[10rem] relative z-0'
       />
       <div className='text-center flex-1 z-10'>

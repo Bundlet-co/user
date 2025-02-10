@@ -2,7 +2,6 @@ import CartLoader from "@/components/animations/CartLoader";
 import EmptyItem from "@/components/EmptyItem";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
-import { dev_url } from "@/utils/axios";
 import { Button, Image } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { BsDash, BsHeart, BsPlus } from "react-icons/bs";
@@ -23,6 +22,7 @@ const Cart = () =>
   {
     navigate('/checkout')
   }
+
 
   useEffect( () =>
   {
@@ -77,20 +77,26 @@ const Cart = () =>
             {cartItems.map(cart=>(
               <div key={cart.id ? cart.id : cartItems.indexOf(cart)+1} className="flex gap-2 border rounded-lg p-2 items-center mb-2">
                 <div className="">
-                  <Image src={ `${ dev_url }/${ cart.product.dp.replace( "public/", "" ) }` } className="w-20 h-20 object-cover" />
+                  <Image src={ cart.product.dp } className="w-20 h-20 object-cover" />
                 </div>
                 <div className="flex-1">
                   <div className="flex flex-between mb-4">
                     <div className="flex-1">
                       <p className="font-bold md:text-medium lg:text-lg">{ cart.product.name }</p>
-                      <div className="flex items-center space-x-2">
+                      { cart.variation && (
+                        <div className="flex items-center space-x-2">
                         <p className="text-small font-semibold capitalize">{ cart.variation.type }:</p>
                         <div className="h-6 w-6 rounded-md" style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
                           {cart.variation.type  !== "color" ? cart.variation.variant : null}
                         </div>
                       </div>
+                      )}
                       <p className='text-primary font-bold text-sall'>
-                        <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.product.variation.find(variation => variation.variant === cart.variation.variant)?.price || 0 }</span>
+                        { cart.variation && ( <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.product.variation.find( variation => variation.variant === cart.variation.variant )?.price || 0 }</span> ) }
+                        
+                        { !cart.variation && (
+                          <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.price }</span>
+                        )}
                         
                           <span className={!cart.product.discount_amount ? "hidden" : "inline-block"}>&#8358;{ cart.price }</span>
                         </p>
@@ -103,11 +109,11 @@ const Cart = () =>
                   </div>
                   <div className="flex justify-evenly items-center font-bold">
                     <div className="flex space-x-2 md:space-x-4 items-center lg:w-3/4">
-                      <Button size="sm" color="danger" variant="flat" onClick={()=>handleDecrement({id:cart.id?cart.id:cart.productId,variant:cart.variation.variant})}><BsDash size={20}/></Button>
+                      <Button size="sm" color="danger" variant="flat" onClick={()=>handleDecrement({id:cart.id?cart.id:cart.productId,variant:cart.variation ? cart.variation.variant : null})}><BsDash size={20}/></Button>
                       <p>{ cart.quantity }</p>
-                      <Button size="sm" color="primary" variant="flat" onClick={()=>handleIncrement({id:cart.id?cart.id:cart.productId,variant:cart.variation.variant})}><BsPlus size={20}/></Button>
+                      <Button size="sm" color="primary" variant="flat" onClick={()=>handleIncrement({id:cart.id?cart.id:cart.productId, variant:cart.variation ? cart.variation.variant : null})}><BsPlus size={20}/></Button>
                     </div>
-                    <Button className="flex space-x-4 lg:w-1/4" size="sm" color="danger" variant="flat" onClick={()=>deleteItem({id:cart.id?cart.id:cart.productId,variant:cart.variation.variant})}><FaTrashCan size={16}/>
+                    <Button className="flex space-x-4 lg:w-1/4" size="sm" color="danger" variant="flat" onClick={()=>deleteItem({id:cart.id?cart.id:cart.productId,variant:cart.variation ? cart.variation.variant : null})}><FaTrashCan size={16}/>
                     <p className="hidden md:block">Remove</p></Button>
                   </div>
                 </div>
