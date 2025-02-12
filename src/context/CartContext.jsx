@@ -230,7 +230,9 @@ export const CartProvider = ( { children } ) =>
         setLoading(false)
       }
     } else {
-      const updatedCarts = carts.filter( item => ( item.productId !== id  && item.variation && item.variation.variant !== variant ) && (item.productId !== id  && !item.variation))
+      const updatedCarts = carts.filter(item => 
+        !(item.productId === id && ((item.variation && item.variation.variant === variant) || !item.variation))
+      );
       console.log(updatedCarts);
       setCarts(updatedCarts);
       localStorage.setItem("carts", JSON.stringify(updatedCarts));

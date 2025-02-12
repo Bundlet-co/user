@@ -37,7 +37,7 @@ const SingleProduct = () =>
 
   const addItemToCart = () =>
   {
-    if ( product.variation > 0 ) {
+    if ( product.variation.length > 0 ) {
       onOpen()
     } else {
       addToCart( product, null, null )
