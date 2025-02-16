@@ -76,8 +76,9 @@ export const CartProvider = ( { children } ) =>
     suplementryProducts: supplementaryProducts !== null && supplementaryProducts.length > 0 ? supplementaryProducts.map((item) => ({
       id: item.id,
       name: item.name,
-      price: item.price,
+      price: item.total,
       quantity: item.quantity,
+      total:item.price
     })) : null,
     quantity: 1,
     price:itemPrice,

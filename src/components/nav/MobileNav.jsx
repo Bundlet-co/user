@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, } from "@nextui-org/react";
+import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, } from "@nextui-org/react";
 import logo from "@/assets/logo.png"
 import { Link, useSearchParams } from "react-router-dom";
 import { BsCart2, BsHeart, BsList, BsPersonCircle, BsXLg } from "react-icons/bs";
@@ -36,12 +36,9 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
             <BsXLg size={20} className="ms-auto" role="button" onClick={toggleIsOpen}/>
           </div>
           <hr className="mt-2 border" />
-          <div className="mt-2 flex-grow overflow-y-auto">
+          <Accordion className="mt-2 flex-grow overflow-y-auto" isCompact classNames={{ title:"text-medium font-semibold" }}>
             { categories.map( category => (
-              <div className="my-4"key={category.id}>
-                <p className="capitalize text-sm font-bold">
-                  {category.name}
-                </p>
+              <AccordionItem className="my-4"key={category.id} title={category.name}>
                 <div className="flex flex-col gap-2 my-2">
                   { category.subCategory.map( item => (
                     <Link to={`/product?category=${item.name}`} onClick={toggleIsOpen} key={item.id} className={cat && cat.toLowerCase()=== item.name.toLowerCase() ?"text-tiny ms-4 bg-neutral-100 p-2 rounded-md hover:bg-neutral-200 border-l-2 border-r-2 border-primary-300": "text-tiny ms-4 bg-neutral-100 p-2 rounded-md hover:bg-neutral-200"} role="button">
@@ -50,9 +47,9 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
                   ))}
                 </div>
                 <hr />
-              </div>
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
       </div>
     )

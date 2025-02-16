@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import { PRODUCT } from "@/constant";
 import useCartContext from "@/hooks/useCartContext";
-import { dev_url } from "@/utils/axios";
 import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter,ModalHeader, Spinner } from "@nextui-org/react";
 import { useState } from "react";
-import { /* BsDash, */ BsDash, BsPlus } from "react-icons/bs";
+import { BsDash, BsPlus } from "react-icons/bs";
 
 
 const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = PRODUCT } ) =>
@@ -14,17 +13,42 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
 
   const addSuplementryProduct = ( sup ) =>
   {
-    setSuplementryProducts((prevProducts) => {
-    const isExisting = prevProducts.find((item) => item.id === sup.id);
+    console.log(sup);
+    setSuplementryProducts( ( prevProducts ) => [ ...prevProducts, {
+      ...sup,total:sup.price,quantity:1
+    }])
+  }
 
-    if (isExisting) {
-      // If product exists, remove it
-      return prevProducts.filter((item) => item.id !== sup.id);
+  const increaseSup = (id) =>
+  {
+    const temSup = [...suplementryProducts]
+    const product = temSup.find( item => item.id === id );
+    const index = temSup.findIndex( item => item.id === id );
+    product.quantity++
+    product.price = product.total * product.quantity;
+    temSup[ index ] = product;
+    setSuplementryProducts(temSup)
+  }
+
+  const decreseSup = (id) =>
+  {
+    console.log(id);
+    const temSup = [...suplementryProducts]
+    const product = temSup.find( item => item.id === id );
+    const index = temSup.findIndex( item => item.id === id );
+
+    product.quantity--
+    if ( product.quantity === 0 ) {
+      const newSup = temSup.filter( item => item.id !== product.id )
+      setSuplementryProducts( newSup );
     } else {
-      // If product does not exist, add it
-      return [...prevProducts, sup];
+      product.price = product.total * product.quantity;
+      temSup[ index ] = product;
+      setSuplementryProducts(temSup)
     }
-  });
+
+    console.log( product );
+    console.log(temSup);
   }
 
   return (
@@ -93,11 +117,31 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
               { product.suplementryProducts.length > 0 && (
                 <div>
                   <p className="text-medium font-bold">Supplementry Items:</p>
-                  <div className="flex gap-4 overflow-x-auto">
+                  <div className="grid grid-cols-2 gap-4 overflow-x-auto">
                     
                     {product.suplementryProducts.map( product => (
-                      <div key={ product.id } className={suplementryProducts.includes(product) ? "border shadow-md rounded-md border-primary":"border shadow-md rounded-md"} role="button" onClick={()=>addSuplementryProduct(product)}>
-                        <Image src={ `${ dev_url }/${ product.dp.replace( "public/", "" ) }` } className="w-32 h-24 object-contain"/>
+                      <div key={ product.id } className={"border shadow-md rounded-md px-2 col-span-1"} role="button" >
+                        <Image src={ product.dp } className="w-full h-24 object-contain" />
+                        <p className="font-bold">{ product.name }</p>
+                        
+                        { suplementryProducts.some( item=>item.id === product.id ) ? (
+                          <div className=" my-2 flex items-center justify-between">
+                            <Button size="sm" className="mx-auto" onClick={()=>decreseSup(product.id)}>
+                              <BsDash />
+                            </Button>
+                            
+                            <p className="text-tiny font-bold">{ suplementryProducts.find(item=>item.id === product.id)?.quantity }</p>
+                            <Button size="sm" className="mx-auto" onClick={()=>increaseSup(product.id)}>
+                              <BsPlus />
+                            </Button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center">
+                              <Button size="sm" className="mx-auto my-2" onClick={()=>addSuplementryProduct(product)}>
+                                <BsPlus />
+                              </Button>
+                            </div>
+                          )}
                       </div>
                     ))}
                   </div>

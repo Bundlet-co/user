@@ -3,7 +3,6 @@ import { CARTITEM, PRODUCT } from "@/constant";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
 import useMainContext from "@/hooks/useMainContext";
-import { dev_url } from "@/utils/axios";
 import { Button, Image, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { FaCartShopping, FaPencil } from "react-icons/fa6";
@@ -77,6 +76,7 @@ const Checkout = () =>
     if(user.address && user.address.location) return setisDisabled(false)
   },[user.address])
 
+
   return (
     <div className="h-full">
       <p className="text-lg md:text-xl text-primary py-2 font-extrabold col-span-full h-fit">Review Order</p>
@@ -94,18 +94,20 @@ const Checkout = () =>
               <p className="text-lg font-bold">{ cartItems.indexOf( cart ) + 1 }.</p>
               <div className="flex gap-2 border rounded-lg p-2 items-center mb-2 shadow flex-grow">
                 <div className="">
-                  <Image src={ `${ dev_url }/${ cart.product.dp.replace( "public/", "" ) }` } className="w-20 h-20 object-cover" />
+                  <Image src={ cart.product.dp} className="w-20 h-20 object-cover" />
                 </div>
                 <div className="flex-1">
                   <div className="flex flex-between mb-4">
                     <div className="flex-1">
                       <p className="font-bold md:text-medium lg:text-lg">{ cart.product.name }</p>
-                      <div className="flex items-center space-x-2">
+                      { cart.variation && (
+                        <div className="flex items-center space-x-2">
                         <p className="text-small font-semibold capitalize">{ cart.variation.type }:</p>
                         <div className="h-6 w-6 rounded-md" style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
                           {cart.variation.type  !== "color" ? cart.variation.variant : null}
                         </div>
                       </div>
+                      )}
                       <div className="flex space-x-2">
                         <p className='text-primary  text-tiny'>
                           <span className="text-black font-bold">Price:</span>
