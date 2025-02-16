@@ -6,6 +6,7 @@ import { BsHeart } from 'react-icons/bs';
 import AddToCartModal from "@/components/product/AddToCartModal";
 import useMainContext from '@/hooks/useMainContext';
 import useCartContext from '@/hooks/useCartContext';
+import { daysLeftToExpire } from '@/utils/functions';
 
 const ProductCard = ( { product } ) =>
 {
@@ -13,6 +14,8 @@ const ProductCard = ( { product } ) =>
   const { addToWishlist, removeFromWishlist, wishlists } = useMainContext();
   const { addToCart } = useCartContext();
   const wishlist = wishlists.find( wishlist => wishlist.product_id === product.id )||{product_id:product.id,inWishlist:false};
+
+  const daysLeft = daysLeftToExpire(product.opening_date,product.available_till)
 
 
   const addItemToCart = () =>
@@ -46,10 +49,12 @@ const ProductCard = ( { product } ) =>
               <span className={ product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ product.price }</span>
               <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${product.price - product.discount_amount}`: `₦${product.price - ((product.discount_amount*product.price)/100)}` }</span>
             </p>
+            { product.opening_date && daysLeft !== 0 && ( <p className='my-2 text-small'>Sales closes in: <span className="font-semibold">{ daysLeft }days</span></p> ) }
+            { product.opening_date && daysLeft === 0 && ( <p className='my-2 text-danger text-small font-semibold'>Sales closesd</p>)}
           </Link>
         </div>
         <div className="w-full flex justify-center my-2 item-center">
-          <Button size="sm" color='primary' onClick={addItemToCart}>
+          <Button size="sm" color='primary' onClick={addItemToCart} isDisabled={daysLeft ===0}>
             <FaCartShopping />
             <span>Add to Cart</span>
           </Button>

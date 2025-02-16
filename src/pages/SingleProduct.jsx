@@ -13,6 +13,7 @@ import useMainContext from "@/hooks/useMainContext";
 import AddToCartModal from "@/components/product/AddToCartModal";
 import { PRODUCT } from "@/constant";
 import useCartContext from "@/hooks/useCartContext";
+import { daysLeftToExpire } from "@/utils/functions";
 
 
 const SingleProduct = () =>
@@ -28,6 +29,7 @@ const SingleProduct = () =>
   const { openToast } = useMainContext();
   const {addToCart} = useCartContext()
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [daysLeft,setDayLeft] = useState(0)
   
   const getVariation = ( type = "",variation =[{ price: "", quantity: "", type: "", variant: "" }],setState ) =>
   {
@@ -51,6 +53,8 @@ const SingleProduct = () =>
     {
       try {
         const res = await fetchData( false, `/product/${ id }` );
+        const daysLeft = daysLeftToExpire( res.data.product.opening_date, res.data.product.available_till );
+        setDayLeft(daysLeft)
         setProduct( res.data.product );
         getVariation( "color", res.data.product.variation,setColor ) ;
         getVariation( "size", res.data.product.variation,setSize ) ;
@@ -108,10 +112,14 @@ const SingleProduct = () =>
               <p className="text-2xl font-bold capitalize">{ product.name } <span className="text-tiny text-primary lowercase">{ product.quantity } {product.unit} available</span></p>
         </div>
             <div className="my-2">
-              <p className='text-primary font-bold text-medium'>Price:
+              <div className="flex items-center justify-between">
+                <p className='text-primary font-bold text-medium'>Price:
           <span className={ product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ product.price }</span>
           <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${product.price - product.discount_amount}`: `₦${product.price - ((product.discount_amount*product.price)/100)}` }</span>
-            </p>
+                </p>
+                { product.opening_date && daysLeft !== 0 && ( <p className='my-2 text-small'>Sales closes in: <span className="font-semibold">{ daysLeft }days</span></p> ) }
+            { product.opening_date && daysLeft === 0 && ( <p className='my-2 text-danger text-small font-semibold'>Sales closesd</p>)}
+              </div>
             <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Description</p>
             <p>{ product.description }</p>
             { product.slug.map( item => (
@@ -170,7 +178,7 @@ const SingleProduct = () =>
               <AddToCartModal isOpen={ isOpen } onOpenChange={onOpenChange} product={product}/>
         </div>
             <div className="flex items-center justify-center sticky -bottom-1 z-10">
-              <Button color='primary' className="w-full md:w-1/2 lg:w-1/4" onClick={addItemToCart}>
+              <Button color='primary' className="w-full md:w-1/2 lg:w-1/4" onClick={addItemToCart} isDisabled={daysLeft ===0}>
                 <FaCartShopping />
                 <span>Add to Cart</span>
               </Button>
