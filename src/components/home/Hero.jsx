@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react';
 import useAxiosFetch from '@/hooks/useAxiosFetch';
 import { Button, Image } from '@nextui-org/react';
 import { BsStarFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 //&#8358;
 const Item = ({carousel,phrase,buyWords}) =>
 {
   return (
-    <div className="border rounded-lg flex items-center p-4 bg-gradient-to-br from-primary-300 to-orange-400 text-white relative">
+    <Link to={`/product/${carousel.id}`} className="border rounded-lg flex items-center p-4 bg-gradient-to-br from-primary-300 to-orange-400 text-white relative">
       <Image
         radius='lg'
         alt={carousel.name}
@@ -36,7 +37,7 @@ const Item = ({carousel,phrase,buyWords}) =>
           <Button color='primary' size='sm'>{buyWords}</Button>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
