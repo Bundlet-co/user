@@ -105,7 +105,7 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
                         <Button
                           size="sm"
                           color="default"
-                          onClick={() => addToCart({ id: product.id, name: product.name, variation: variattion, suplementryProducts,discount_type:product.discount_type,discount_amount:product.discount_amount }, variattion, suplementryProducts)}
+                          onClick={() => addToCart({ id: product.id, name: product.name, variation: variattion, suplementryProducts,discount_type:product.discount_type,discount_amount:product.discount_amount }, variattion, suplementryProducts,setSuplementryProducts)}
                         >
                           <BsPlus />
                         </Button>

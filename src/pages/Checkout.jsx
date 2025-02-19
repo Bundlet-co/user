@@ -56,7 +56,7 @@ const Checkout = () =>
       userId: user.id,
       netAmount: cartTotal,
       address: `${ user.address.location }, ${ user.address.city }, ${ user.address.state }, ${ user.address.country }`,
-      orderProduct: cartItems.map(item=>({productId: item.productId,price:item.price,quantity:item.quantity,variation:item.variation}))
+      orderProduct: cartItems.map(item=>({productId: item.productId,price:item.price,quantity:item.quantity,variation:item.variation,supplementryProducts:item.suplementryProducts}))
     }
     try {
       const res = await fetchData( true, `/order`, "post", data );
