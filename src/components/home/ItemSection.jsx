@@ -41,7 +41,7 @@ const ItemSection = ({name,category}) =>
     })()
   },[category,fetchData])
   return (
-    <div className="my-4">
+    <div className={loading && products.length === 0 ? "my-4": !loading && products.length === 0 ? "hidden": "my-4"}>
       <div className="flex justify-between items-center">
         <p className="text-lg font-bold text-primary capitalize">{ name }</p>
         <Link to={`/product?category=${category}`} className="text-tiny md:text-small underline underline-offset-2 capitalize">see more</Link>
