@@ -7,6 +7,7 @@ import AddToCartModal from "@/components/product/AddToCartModal";
 import useMainContext from '@/hooks/useMainContext';
 import useCartContext from '@/hooks/useCartContext';
 import { daysLeftToExpire } from '@/utils/functions';
+import { dev_url } from '@/utils/axios';
 
 const ProductCard = ( { product } ) =>
 {
@@ -35,7 +36,7 @@ const ProductCard = ( { product } ) =>
           <Image
               radius='lg'
               alt={product.name}
-              src={product.dp}
+              src={`${dev_url}/images/products/${product.dp.replace("public/","")}`}
               className='object-cover relative z-0 h-[8rem] w-[12rem]'
           />
         </CardBody>

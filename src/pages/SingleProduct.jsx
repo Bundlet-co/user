@@ -14,6 +14,7 @@ import AddToCartModal from "@/components/product/AddToCartModal";
 import { PRODUCT } from "@/constant";
 import useCartContext from "@/hooks/useCartContext";
 import { daysLeftToExpire } from "@/utils/functions";
+import { dev_url } from "@/utils/axios";
 
 
 const SingleProduct = () =>
@@ -102,7 +103,7 @@ const SingleProduct = () =>
       >
         { carouselImg.map( img => (
           <SwiperSlide key={ carouselImg.indexOf( img ) + 1 } className="h-36 swiper-slide1">
-            <Image src={img} className="mx-auto object-cover  w-full"/>
+            <Image src={`${dev_url}/images/products/${img.replace("public/","")}`} className="mx-auto object-cover  w-full"/>
           </SwiperSlide>
         ))}
       </Swiper>

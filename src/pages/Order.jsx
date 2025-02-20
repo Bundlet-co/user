@@ -1,6 +1,7 @@
 import CartLoader from "@/components/animations/CartLoader";
 import EmptyItem from "@/components/EmptyItem";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
+import { dev_url } from "@/utils/axios";
 import { Image } from "@nextui-org/react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ const Order = () =>
                 <p className="text-tiny"><span className="capitalize font-bold">order Id:</span> { order.id }</p>
                 <div className="flex items-center space-x-2">
                   <div className="">
-                    <Image src={ order.products[0].product.dp } className="w-20 h-20 object-cover" />
+                    <Image src={`${dev_url}/images/products/${order.products[0].product.dp.replace("public/","")}`} className="w-20 h-20 object-cover" />
                   </div>
                   <div>
                     <p className="text-tiny"><span className="capitalize font-bold">Net Amount:</span> &#8358;{ order.netAmount }</p>

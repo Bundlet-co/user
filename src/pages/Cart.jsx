@@ -2,6 +2,7 @@ import CartLoader from "@/components/animations/CartLoader";
 import EmptyItem from "@/components/EmptyItem";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
+import { dev_url } from "@/utils/axios";
 import { Button, Image } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { BsDash, BsHeart, BsPlus } from "react-icons/bs";
@@ -79,7 +80,7 @@ const Cart = () =>
               <div key={cart.id ? cart.id : cartItems.indexOf(cart)+1} className="grid grid-cols-1 mb-2 border rounded-lg p-2">
                 <div className="flex gap-2  items-center">
                   <div className="">
-                    <Image src={ cart.product.dp } className="w-20 h-20 object-cover" />
+                    <Image src={`${dev_url}/images/products/${cart.product.dp.replace("public/","")}`} className="w-20 h-20 object-cover" />
                   </div>
                   <div className="flex-1">
                     <div className="flex flex-between mb-4">

@@ -3,6 +3,7 @@ import { CARTITEM, PRODUCT } from "@/constant";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
 import useMainContext from "@/hooks/useMainContext";
+import { dev_url } from "@/utils/axios";
 import { Button, Image, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { FaCartShopping, FaPencil } from "react-icons/fa6";
@@ -94,7 +95,9 @@ const Checkout = () =>
               <p className="text-lg font-bold">{ cartItems.indexOf( cart ) + 1 }.</p>
               <div className="flex gap-2 border rounded-lg p-2 items-center mb-2 shadow flex-grow">
                 <div className="">
-                  <Image src={ cart.product.dp} className="w-20 h-20 object-cover" />
+                  <Image
+                    src={ `${ dev_url }/images/products/${ cart.product.dp.replace( "public/", "" ) }` }
+                    className="w-20 h-20 object-cover" />
                 </div>
                 <div className="flex-1">
                   <div className="flex flex-between mb-4">
