@@ -96,7 +96,7 @@ const Checkout = () =>
               <div className="flex gap-2 border rounded-lg p-2 items-center mb-2 shadow flex-grow">
                 <div className="">
                   <Image
-                    src={ `${ dev_url }/images/products/${ cart.product.dp.replace( "public/", "" ) }` }
+                    src={ `${ dev_url }/${ cart.product.dp.replace( "public/", "" ) }` }
                     className="w-20 h-20 object-cover" />
                 </div>
                 <div className="flex-1">

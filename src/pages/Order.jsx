@@ -53,7 +53,7 @@ const Order = () =>
                 <p className="text-tiny"><span className="capitalize font-bold">order Id:</span> { order.id }</p>
                 <div className="flex items-center space-x-2">
                   <div className="">
-                    <Image src={`${dev_url}/images/products/${order.products[0].product.dp.replace("public/","")}`} className="w-20 h-20 object-cover" />
+                    <Image src={`${dev_url}/${order.products[0].product.dp.replace("public/","")}`} className="w-20 h-20 object-cover" />
                   </div>
                   <div>
                     <p className="text-tiny"><span className="capitalize font-bold">Net Amount:</span> &#8358;{ order.netAmount }</p>

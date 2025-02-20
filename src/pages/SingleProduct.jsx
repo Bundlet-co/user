@@ -103,7 +103,7 @@ const SingleProduct = () =>
       >
         { carouselImg.map( img => (
           <SwiperSlide key={ carouselImg.indexOf( img ) + 1 } className="h-36 swiper-slide1">
-            <Image src={`${dev_url}/images/products/${img.replace("public/","")}`} className="mx-auto object-cover  w-full"/>
+            <Image src={`${dev_url}/${img.replace("public/","")}`} className="mx-auto object-cover  w-full"/>
           </SwiperSlide>
         ))}
       </Swiper>

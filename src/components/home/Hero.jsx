@@ -17,7 +17,7 @@ const Item = ({carousel,phrase,buyWords}) =>
       <Image
         radius='lg'
         alt={carousel.name}
-        src={`${dev_url}/images/products/${carousel.dp.replace("public/","")}`}
+        src={`${dev_url}/${carousel.dp.replace("public/","")}`}
         className='object-cover w-[10rem] h-[10rem] relative z-0'
       />
       <div className='text-center flex-1 z-10'>

@@ -36,7 +36,7 @@ const ProductCard = ( { product } ) =>
           <Image
               radius='lg'
               alt={product.name}
-              src={`${dev_url}/images/products/${product.dp.replace("public/","")}`}
+              src={`${dev_url}/${product.dp.replace("public/","")}`}
               className='object-cover relative z-0 h-[8rem] w-[12rem]'
           />
         </CardBody>
