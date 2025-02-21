@@ -98,10 +98,10 @@ const Cart = () =>
                           { cart.variation && ( <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.product.variation.find( variation => variation.variant === cart.variation.variant )?.price || 0 }</span> ) }
                           
                           { !cart.variation && (
-                            <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.price }</span>
+                            <span className={ cart.price ? "line-through italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ cart.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span>
                           )}
                           
-                            <span className={!cart.product.discount_amount ? "hidden" : "inline-block"}>&#8358;{ cart.price }</span>
+                            <span className={!cart.product.discount_amount ? "hidden" : "inline-block"}>&#8358;{ cart.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span>
                         </p>
                         
                       </div>
@@ -144,7 +144,7 @@ const Cart = () =>
           <div className="sticky mx-auto w-full flex justify-between items-center border-t-1 p-2">
             <div>
               <div>
-                <p className="text-tiny md:text-small lg:text-medium font-bold">Subtotal: ₦{ cartSubTotal }</p>
+                <p className="text-tiny md:text-small lg:text-medium font-bold">Subtotal: ₦{ cartSubTotal.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
               </div>
             </div>
             <Button radius="full" color="primary" className="flex space-x-2 w-1/2" onClick={checkoutBtn}>

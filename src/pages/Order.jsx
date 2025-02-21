@@ -56,7 +56,7 @@ const Order = () =>
                     <Image src={`${dev_url}/${order.products[0].product.dp.replace("public/","")}`} className="w-20 h-20 object-cover" />
                   </div>
                   <div>
-                    <p className="text-tiny"><span className="capitalize font-bold">Net Amount:</span> &#8358;{ order.netAmount }</p>
+                    <p className="text-tiny"><span className="capitalize font-bold">Net Amount:</span> &#8358;{ order.netAmount.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
                     <p className={order.status === "PENDING" ? "text-tiny text-warning": order.status === "DELIVERED" ? "text-tiny text-success" :order.status === "CANCELLED"?"text-tiny text-danger":"text-tiny text-primary"}><span className="capitalize font-bold text-black">Status:</span> { order.status }</p>
                     <p className="text-tiny"><span className="capitalize font-bold">Ordered Date:</span> { dayjs(order.createdAt).format("MMMM D, YYYY") }</p>
                   </div>

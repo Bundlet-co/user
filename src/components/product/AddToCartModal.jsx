@@ -70,9 +70,12 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
                     <div className="">
                       <div className="text-sm flex items-center space-x-2 capitalize">
                         <p className="text-gray-600">{variattion.type}:</p>
-                        <div className="h-6 w-6 rounded-md" style={variattion.type === "color" ? { backgroundColor: variattion.variant } : {}}>
-                          {variattion.type !== "color" ? variattion.variant : null}
-                        </div>
+                        { variattion.type === "color" && (
+                          <div className="h-6 w-6 rounded-md" style={variattion.type === "color" ? { backgroundColor: variattion.variant } : {}}/>
+                        ) }
+                        { variattion.type !== "color" && (
+                          <p className="text-tiny text-wrap font-bold">{variattion.variant}</p>
+                        )}
                       </div>
                       <p className="text-tiny">
                         <span className="font-bold">Available:</span> {variattion.quantity} {product.unit} left

@@ -20,12 +20,16 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
         <div className={ isOpen ? "md:hidden absolute top-0 left-0 z-10 w-3/4 bg-white shadow-md h-full px-3 py-4 flex flex-col animate-slideIn overflow-x-auto" : "md:hidden absolute top-0 left-0 z-10 w-3/4 bg-white shadow-md h-full px-3 py-4 flex flex-col animate-slideOut" }>
           <div className="flex items-center justify-between">
             { user.id ? (
-            <Link to="/profile" onClick={toggleIsOpen}  className="flex items-center">
+            <Link to="/profile" onClick={toggleIsOpen}  className="flex items-center gap-4">
               <Avatar
                 as="button"
                 className="transition-transform"
                 name={user.name.split(' ').map(word=> word[0].toUpperCase()).join('')}
-              />
+                />
+                <div>
+                  <p className="font-semibold text-small">{ user.name }</p>
+                  <p className="text-tiny text-default-500">{ user.email.slice( 0, 10 ) }...{ user.email.slice( -3 ) }</p>
+                </div>
             </Link>
             ): (
               <Link to="/login" onClick={toggleIsOpen}  className="flex items-center">
@@ -36,9 +40,12 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
             <BsXLg size={20} className="ms-auto" role="button" onClick={toggleIsOpen}/>
           </div>
           <hr className="mt-2 border" />
-          <Accordion className="mt-2 flex-grow overflow-y-auto" isCompact classNames={{ title:"text-medium font-semibold" }}>
+          <Accordion className="mt-2 flex-grow overflow-y-auto" isCompact>
             { categories.map( category => (
-              <AccordionItem className="my-4"key={category.id} title={category.name}>
+              <AccordionItem className="my-4" key={ category.id } title={ `${ category.name.slice( 0, 15 ) }...` } classNames={ {
+                title: "text-small font-semibold", 
+                base:"my-0"
+              }}>
                 <div className="flex flex-col gap-2 my-2">
                   { category.subCategory.map( item => (
                     <Link to={`/product?category=${item.name}`} onClick={toggleIsOpen} key={item.id} className={cat && cat.toLowerCase()=== item.name.toLowerCase() ?"text-tiny ms-4 bg-neutral-100 p-2 rounded-md hover:bg-neutral-200 border-l-2 border-r-2 border-primary-300": "text-tiny ms-4 bg-neutral-100 p-2 rounded-md hover:bg-neutral-200"} role="button">
@@ -46,7 +53,6 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
                     </Link>
                   ))}
                 </div>
-                <hr />
               </AccordionItem>
             ))}
           </Accordion>

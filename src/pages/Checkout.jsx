@@ -114,7 +114,7 @@ const Checkout = () =>
                       <div className="flex space-x-2">
                         <p className='text-primary  text-tiny'>
                           <span className="text-black font-bold">Price:</span>
-                          <span className={"inline-block"}>&#8358;{ cart.price }</span>
+                          <span className={"inline-block"}>&#8358;{ cart.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span>
                         </p>
                         <p className='text-tiny'>
                           <span className="text-black font-bold">Quantity:</span>
@@ -123,7 +123,7 @@ const Checkout = () =>
                       </div>
                       <p className='text-normal font-bold'>
                         <span className=" ">Total:</span>{" "}
-                        <span className={"inline-block"}>&#8358;{ cart.total }</span>
+                        <span className={"inline-block"}>&#8358;{ cart.total.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span>
                       </p>
                   </div>
                 </div>
@@ -151,13 +151,13 @@ const Checkout = () =>
           <hr className="hidden lg:block w-full"/>
           <div className="lg:w-full">
             <div>
-              <p className="text-tiny md:text-small text-end lg:text-lg font-bold">Subtotal: <span className="font-normal">₦{ cartSubTotal }</span></p>
+              <p className="text-tiny md:text-small text-end lg:text-lg font-bold">Subtotal: <span className="font-normal">₦{ cartSubTotal.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span></p>
             </div>
             <div>
-              <p className="text-tiny md:text-small text-end lg:text-lg font-bold">VAT: <span className="font-normal">₦{ cartTax }</span></p>
+              <p className="text-tiny md:text-small text-end lg:text-lg font-bold">VAT: <span className="font-normal">₦{ cartTax.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span></p>
             </div>
             <div>
-              <p className="text-tiny md:text-small text-end lg:text-lg font-bold">Total: <span className="font-normal">₦{ cartTotal }</span></p>
+              <p className="text-tiny md:text-small text-end lg:text-lg font-bold">Total: <span className="font-normal">₦{ cartTotal.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</span></p>
             </div>
           </div>
           <Button radius="full" color="primary" className="flex space-x-2 w-1/2 lg:w-full" onClick={checkOut} isLoading={loading} isDisabled={isDisabled}>

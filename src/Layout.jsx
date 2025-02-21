@@ -12,10 +12,10 @@ const Layout = () =>
     <div className="w-screen h-[100dvh] relative max-w-[100vw] flex flex-col">
       <Header />
       <div className="grid grid-cols-6 flex-grow overflow-y-auto border">
-        <div className="hidden md:block md:col-span-2 max-h-full overflow-y-auto p-4 border-r">
+        <div className="hidden md:block md:col-span-2 xl:col-span-1 max-h-full overflow-y-auto p-4 border-r">
           <Sidebar/>
         </div>
-        <div className="col-span-full md:col-span-4 max-h-full overflow-y-auto p-4">
+        <div className="col-span-full md:col-span-4 xl:col-span-5 max-h-full overflow-y-auto p-4">
           <Outlet/>
         </div>
       </div>
