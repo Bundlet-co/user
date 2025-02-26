@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, } from "@nextui-org/react";
+import logo from "../../assets/logo.png"
 import { Link, useSearchParams } from "react-router-dom";
 import { BsCart2, BsHeart, BsList, BsPersonCircle, BsXLg } from "react-icons/bs";
 import { SearchContent } from "./Nav";
@@ -79,7 +80,7 @@ const MobileNav = () =>
   return (
     <nav className="p-1 px-2 md:hidden">
       <div className="flex items-center justify-center flex-col py-3">
-        <Link to="/"><Image src="/logo2.png" alt="Logo" className="w-28" /></Link>
+        <Link to="/"><Image src={ logo } alt="Logo" className="w-28" /></Link>
         <section className="flex justify-between items-center py-3 px-1 w-full">
         
         <div className="">
