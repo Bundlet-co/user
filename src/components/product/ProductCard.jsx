@@ -30,13 +30,13 @@ const ProductCard = ( { product } ) =>
   }
   
   return (
-    <Card shadow='sm' className='relative me-4 flex-none'>
+    <Card shadow='sm' className='relative flex-none border rounded-lg'>
       <Link to={`/product/${product.id}`}>
         <CardBody>
           <Image
               alt={product.name}
               src={`${dev_url}/${product.dp.replace("public/","")}`}
-              className='object-cover relative z-0 h-[8rem] w-[14rem]'
+              className='object-cover relative z-0 h-[8rem] w-[10rem] rounded-none'
           />
         </CardBody>
       </Link>
@@ -45,11 +45,11 @@ const ProductCard = ( { product } ) =>
           <Link to={`/product/${product.id}`}>
             <p className="capitalize text-medium font-semibold">{ product.name }</p>
             
-            <p className='text-primary font-bold text-sall'>
+            <p className='text-primary font-bold text-small'>
               <span className={ product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ product.price }</span>
               <span className={!product.discount_amount ? "hidden" : "inline-block"}>{ product.discount_type.toLowerCase() === "flat" ? `₦${(product.price - product.discount_amount).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`: `₦${(product.price - ((product.discount_amount*product.price)/100)).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}` }</span>
             </p>
-            { product.opening_date && daysLeft !== 0 && ( <p className='my-2 text-small'>Sales closes in: <span className="font-semibold">{ daysLeft }days</span></p> ) }
+            { product.opening_date && daysLeft !== 0 && ( <p className='my-2 text-tiny'>Sales closes in: <span className="font-semibold">{ daysLeft }days</span></p> ) }
             { product.opening_date && daysLeft === 0 && ( <p className='my-2 text-danger text-small font-semibold'>Sales closesd</p>)}
           </Link>
         </div>
@@ -65,7 +65,7 @@ const ProductCard = ( { product } ) =>
         <BsHeart size={24}/>
       </div>
       { product.discount_amount ? (
-        <div className="absolute z-10 flex justify-center items-center left-2 bg-danger-400 text-neutral-100 top-2 rounded-lg p-2 md:p-2">
+        <div className="absolute z-10 flex justify-center items-center left-2 bg-primary-600 text-neutral-100 top-2 rounded-md p-2 md:p-2">
           <p className="text-[10px]">- {product.discount_type.toLowerCase() === "flat" ? `₦${product.discount_amount}` : `${product.discount_amount}%`}</p>
         </div>
       ) : null }

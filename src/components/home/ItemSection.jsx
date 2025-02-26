@@ -70,7 +70,7 @@ const ItemSection = ({name,category}) =>
         <button onClick={() => scroll("left")} className={products.length > 2 ? 'absolute top-1/2 z-10 left-0  hover:text-white rounded-full  me-2 bg-white text-primary hover:bg-primary' : "hidden"} >
           <BsArrowLeftCircle size={36}/>
         </button>
-        <div className="scroll-container relative flex items-center overflow-x-auto p-4" ref={ scrollRef }>
+        <div className="scroll-container relative flex items-center overflow-x-auto p-4 gap-4" ref={ scrollRef }>
           {
           products.map( product => (
             <ProductCard key={product.id} product={product} />

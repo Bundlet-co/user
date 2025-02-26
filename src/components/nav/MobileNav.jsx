@@ -12,6 +12,10 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
 {
   const {categories,user} = useMainContext()
   const [ searchParams ] = useSearchParams()
+  const getInitials = (str) =>{
+  	if(typeof str !== "string" || str.trim().length===0) return "";
+  	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
+  }
   
   const cat = searchParams.get('category');
   return (
@@ -24,7 +28,7 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
               <Avatar
                 as="button"
                 className="transition-transform"
-                name={user.name.split(' ').map(word=> word[0].toUpperCase()).join('')}
+                name={getInitials(user.name)}
                 />
                 <div>
                   <p className="font-semibold text-small">{ user.name }</p>

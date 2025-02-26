@@ -98,7 +98,7 @@ const SingleProduct = () =>
           slideShadows: true,
         } }
         modules={[EffectCoverflow, Pagination,Autoplay]}
-        className="mySwiper border rounded-lg shadow-md scroll-container1 swiper1"
+        className="mySwiper scroll-container1 swiper1"
         autoplay={ { delay: 2500, disableOnInteraction: false } }
       >
         { carouselImg.map( img => (
@@ -131,7 +131,11 @@ const SingleProduct = () =>
                 <p className="text-lg font-bold uppercase underline underline-offset-2 my-4">Available colors</p>
                 <div className="flex space-x-4">
                     { color.map( item => (
-                    <div className={`h-8 w-8 rounded-md`} role="button" style={{ backgroundColor:item.variant }} key={ color.indexOf( item ) }/>
+                      <>
+                        <div className={ `h-8 w-8 rounded-md` } role="button" style={ { backgroundColor: item.variant } } key={ color.indexOf( item ) } />
+                      <p className="text-small">Price: ₦{ item.price }</p>
+                      </>
+                      
                   ))}
                 </div>
               </div>
@@ -142,7 +146,9 @@ const SingleProduct = () =>
                 <div className="flex space-x-4">
                     { size.map( item => (
                     <div className={ `h-8 w-8 rounded-md border` } role="button" key={ size.indexOf( item ) }>
-                  <p className="text-center uppercase font-bold">{ item.variant }</p>
+                        <p className="text-center uppercase font-bold">{ item.variant }</p>
+                  <p className="text-small">Price: ₦{ item.price }</p>
+                        
                 </div>
                   ))}
                 </div>
@@ -155,7 +161,8 @@ const SingleProduct = () =>
                 <div className="flex space-x-4">
                     { others.map( item => (
                     <div className={ `w-fit px-4 py-2 rounded-md border` } role="button" key={ others.indexOf( item ) }>
-                  <p className="text-center uppercase font-bold">{ item.variant }</p>
+                  <p className="text-center text-small">{ item.variant }</p>
+                  <p className="text-small">Price: ₦{ item.price }</p>
                 </div>
                   ))}
                 </div>
@@ -167,7 +174,7 @@ const SingleProduct = () =>
                   <div className="grid grid-cols-4 md:grid-cols-10 gap-4">
                     { product.suplementryProducts.map( item => (
                       <div key={ item.id } className="col-span-2 border rounded-2xl p-2 shadow">
-                        <Image src={item.dp } className=" w-40 h-24 object-contain border mb-4" />
+                        <Image src={`${dev_url}/${item.dp.replace("public/","")}` } className=" w-[20rem] rounded-none h-24 object-contain mb-4" />
                         <p className="capitalize text-small font-semibold">{ item.name }</p>
                         <p className="text-tiny my-2">Price: ₦{ item.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
                         <p className="text-tiny">Quantity: { item.quantity }</p>

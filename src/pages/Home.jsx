@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Hero from "@/components/home/Hero";
 import ItemSection from "@/components/home/ItemSection";
 import useMainContext from "@/hooks/useMainContext";
@@ -17,6 +18,7 @@ const Home = () =>
           ))
         ))
       }
+      <Footer/>
     </div>
   )
 }

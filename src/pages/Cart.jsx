@@ -89,8 +89,8 @@ const Cart = () =>
                         { cart.variation && (
                           <div className="flex items-center space-x-2">
                           <p className="text-small font-semibold capitalize">{ cart.variation.type }:</p>
-                          <div className="h-6 w-6 rounded-md" style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
-                            {cart.variation.type  !== "color" ? cart.variation.variant : null}
+                          <div className={cart.variation.type === "color" ? "h-6 w-6 rounded-md" :""} style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
+                            {cart.variation.type  !== "color" ? <p className="text-tiny">{cart.variation.variant}</p> : null}
                           </div>
                         </div>
                         )}

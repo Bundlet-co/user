@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { PRODUCT } from "@/constant";
 import useCartContext from "@/hooks/useCartContext";
+import { dev_url } from "@/utils/axios";
 import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter,ModalHeader, Spinner } from "@nextui-org/react";
 import { useState } from "react";
 import { BsDash, BsPlus } from "react-icons/bs";
@@ -124,7 +125,7 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
                     
                     {product.suplementryProducts.map( product => (
                       <div key={ product.id } className={"border shadow-md rounded-md px-2 col-span-1"} role="button" >
-                        <Image src={ product.dp } className="w-full h-24 object-contain" />
+                        <Image src={ `${dev_url}/${product.dp.replace("public/","")}` } className="w-[50rem] h-24 object-contain" />
                         <p className="font-bold">{ product.name }</p>
                         
                         { suplementryProducts.some( item=>item.id === product.id ) ? (

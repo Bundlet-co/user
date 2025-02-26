@@ -82,7 +82,7 @@ const Checkout = () =>
     <div className="h-full">
       <p className="text-lg md:text-xl text-primary py-2 font-extrabold col-span-full h-fit">Review Order</p>
       <section className="h-full flex flex-col lg:grid lg:grid-cols-5 lg:gap-4">
-        <div className="col-span-3 p-4 lg:max-h-full overflow-y-auto border rounded-md  lg:h-fit">
+        <div className="col-span-3 p-4 lg:max-h-full overflow-y-auto border   lg:h-fit">
           { !user.address && ( <p>Add an address</p> ) }
           {user.address && (
             <div className="lg:hidden w-full mb-4 border-b-1">
@@ -91,9 +91,9 @@ const Checkout = () =>
             </div>
           )}
           { cartItems.map( cart => (
-            <div className="flex space-x-2 items-center flex-grow" key={ cart.id ? cart.id : cartItems.indexOf( cart ) + 1 } >
+            <div className="flex space-x-2 border-b items-center flex-grow" key={ cart.id ? cart.id : cartItems.indexOf( cart ) + 1 } >
               <p className="text-lg font-bold">{ cartItems.indexOf( cart ) + 1 }.</p>
-              <div className="flex gap-2 border rounded-lg p-2 items-center mb-2 shadow flex-grow">
+              <div className="flex gap-2 p-2 items-center mb-2 flex-grow">
                 <div className="">
                   <Image
                     src={ `${ dev_url }/${ cart.product.dp.replace( "public/", "" ) }` }
@@ -106,9 +106,9 @@ const Checkout = () =>
                       { cart.variation && (
                         <div className="flex items-center space-x-2">
                         <p className="text-small font-semibold capitalize">{ cart.variation.type }:</p>
-                        <div className="h-6 w-6 rounded-md" style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
-                          {cart.variation.type  !== "color" ? cart.variation.variant : null}
-                        </div>
+                        <div className={cart.variation.type === "color" ? "h-6 w-6 rounded-md" :""} style={cart.variation.type  === "color" ? { backgroundColor: cart.variation.variant } : {}}>
+                            {cart.variation.type  !== "color" ? <p className="text-tiny">{cart.variation.variant}</p> : null}
+                          </div>
                       </div>
                       )}
                       <div className="flex space-x-2">
