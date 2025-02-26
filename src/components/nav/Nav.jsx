@@ -1,5 +1,4 @@
 import { Button, Image, Input, Select,Navbar, NavbarBrand, NavbarContent,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, SelectItem, NavbarItem, SelectSection } from "@nextui-org/react";
-import logo from "@/assets/logo.png"
 import { BsCart2, BsHeart, BsPersonCircle, BsSearch } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import useMainContext from "@/hooks/useMainContext";
@@ -41,7 +40,7 @@ const getInitials = (str) =>{
       <Navbar isBlurred isBordered maxWidth="full" className="lg:container w-full mx-auto">
         <NavbarContent justify="start">
           <NavbarBrand className="mr-4">
-            <Link to="/"><Image src={logo} alt="Logo" className="w-40"/></Link>
+            <Link to="/"><Image src="/logo2.png" alt="Logo" className="w-40"/></Link>
           </NavbarBrand>
         </NavbarContent>
         
