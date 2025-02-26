@@ -1,5 +1,5 @@
 import { Button, Image, Input, Select,Navbar, NavbarBrand, NavbarContent,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, SelectItem, NavbarItem, SelectSection } from "@nextui-org/react";
-import logo from "../../assets/logo.png"
+import logo from "@/assets/logo.png"
 import { BsCart2, BsHeart, BsPersonCircle, BsSearch } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import useMainContext from "@/hooks/useMainContext";

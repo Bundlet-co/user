@@ -161,7 +161,7 @@ const SingleProduct = () =>
                 <div className="flex space-x-4">
                     { others.map( item => (
                     <div className={ `w-fit px-4 py-2 rounded-md border` } role="button" key={ others.indexOf( item ) }>
-                  <p className="text-center text-small">{ item.variant }</p>
+                  <p className="text-small">{ item.variant }</p>
                   <p className="text-small">Price: ₦{ item.price }</p>
                 </div>
                   ))}

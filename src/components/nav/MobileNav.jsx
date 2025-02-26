@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, } from "@nextui-org/react";
-import logo from "../../assets/logo.png"
+import logo from "@/assets/logo.png"
 import { Link, useSearchParams } from "react-router-dom";
 import { BsCart2, BsHeart, BsList, BsPersonCircle, BsXLg } from "react-icons/bs";
 import { SearchContent } from "./Nav";
