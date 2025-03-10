@@ -1,40 +1,26 @@
-import { Button, Image, Input, Select,Navbar, NavbarBrand, NavbarContent,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, SelectItem, NavbarItem, SelectSection } from "@nextui-org/react";
+import { Button, Image, Input,Navbar, NavbarBrand, NavbarContent,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, NavbarItem } from "@nextui-org/react";
 import logo from "@/assets/logo.png"
 import { BsCart2, BsHeart, BsPersonCircle, BsSearch } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useMainContext from "@/hooks/useMainContext";
 import useLogout from "@/hooks/useLogout";
+import { useState } from "react";
 
-
-export const SearchContent = () =>
-{
-  const { categories } = useMainContext()
-
-  return (
-    <div className="flex items-center px-0 mx-0 space-x-1">
-      <Select className="w-24 hidden md:block" placeholder="Select a category" size="sm">
-        { categories.map( category => (
-          <SelectSection showDivider title={ category.name } key={ category.id }>
-            { category.subCategory.map( item => (
-              <SelectItem key={item.name}>{item.name}</SelectItem>
-            ))}
-          </SelectSection>
-        ))}
-      </Select>
-      <Button color="primary" size="sm">
-        <BsSearch/>
-      </Button>
-    </div>
-  )
-}
 
 const Nav = () =>
 {
   const { user } = useMainContext();
+  const [search,setSearch] = useState("")
   const logout = useLogout();
 const getInitials = (str) =>{
   	if(typeof str !== "string" || str.trim().length===0) return "";
   	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
+}
+  const navigate = useNavigate()
+  const searchItem = () =>
+  {
+    navigate( `/product?search=${ search }` );
+    setSearch("")
   }
   return (
     <nav className="hidden md:block">
@@ -56,8 +42,12 @@ const getInitials = (str) =>{
             size="sm"
             variant="bordered"
             color="primary"
-            endContent={<SearchContent />}
+            endContent={ <Button size="sm" color="primary" onClick={searchItem}>
+              <BsSearch/>
+            </Button>}
             type="search"
+            value={ search }
+            onChange={(e)=>setSearch(e.target.value)}
           />
         </NavbarContent>
 

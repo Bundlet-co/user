@@ -3,7 +3,7 @@ import useAxiosFetch from "./useAxiosFetch";
 import { useInView } from 'react-intersection-observer';
 
 
-const useInfiteScroll = ({url,category}) =>
+const useInfiteScroll = ({url,category,search}) =>
 {
   const { fetchData } = useAxiosFetch();
   const [products,setProducts] = useState([])
@@ -19,6 +19,9 @@ const useInfiteScroll = ({url,category}) =>
     let baseUrl = `${ url }?skip=${ skip }`;
     if ( category ) {
       baseUrl+=`&category=${category}`
+    }
+    if ( search ) {
+      baseUrl =`${url}&skip=${skip}`
     }
     try {
       setIsLoading(true);
@@ -39,14 +42,14 @@ const useInfiteScroll = ({url,category}) =>
     } finally {
       setIsLoading(false)
     }
-    },[ hasMore,fetchData,category,skip,isLoading,url])
+    },[ hasMore,fetchData,category,skip,isLoading,url,search])
 
   useEffect(() => {
     // Reset when category changes
     setProducts([]);
     setSkip(0);
     setHasMore(true);
-  }, [category]);
+  }, [category,search]);
 
 
   

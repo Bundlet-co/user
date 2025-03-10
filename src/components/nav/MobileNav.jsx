@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, } from "@nextui-org/react";
+import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, Button, } from "@nextui-org/react";
 import logo from "@/assets/logo.png"
-import { Link, useSearchParams } from "react-router-dom";
-import { BsCart2, BsHeart, BsList, BsPersonCircle, BsXLg } from "react-icons/bs";
-import { SearchContent } from "./Nav";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { BsCart2, BsHeart, BsList, BsPersonCircle, BsSearch, BsXLg } from "react-icons/bs";
 import { useState } from "react";
 import useMainContext from "@/hooks/useMainContext";
 import useLogout from "@/hooks/useLogout";
@@ -69,14 +68,20 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
 const MobileNav = () =>
 {
   const [ isOpen, setIsOpen ] = useState( false );
-
+  const [search,setSearch] = useState("")
   const toggleIsOpen = () => setIsOpen( !isOpen );
   const { user } = useMainContext()
   const logout = useLogout();
     const getInitials = (str) =>{
   	if(typeof str !== "string" || str.trim().length===0) return "";
   	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
-  }
+    }
+  const navigate = useNavigate()
+    const searchItem = () =>
+    {
+      navigate( `/product?search=${ search }` );
+      setSearch("")
+    }
   return (
     <nav className="p-1 px-2 md:hidden">
       <div className="flex items-center justify-center flex-col py-3">
@@ -136,8 +141,12 @@ const MobileNav = () =>
             size="sm"
             variant="bordered"
             color="primary"
-            endContent={<SearchContent />}
-            type="search"
+          type="search"
+          endContent={ <Button size="sm" color="primary" onClick={searchItem}>
+              <BsSearch/>
+            </Button>}
+            value={ search }
+            onChange={(e)=>setSearch(e.target.value)}
           />
       </div>
       
