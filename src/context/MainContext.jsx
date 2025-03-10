@@ -3,6 +3,7 @@ import useAxiosFetch from '@/hooks/useAxiosFetch';
 import { EMAIL_REGEX, PWD_REGEX } from "@/constant";
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import { generateRefrence } from '@/utils/functions';
 
 
 const MainContext = createContext( {
@@ -36,7 +37,8 @@ const MainContext = createContext( {
     isVerified: false,
     accessToken:"",
     createdAt:"",
-    updatedAt:""
+    updatedAt: "",
+    balance:0
   },
   setUser: () => { },
   registerSubmit: async () => { },
@@ -57,7 +59,7 @@ export const MainProvider = ( { children } ) =>
   const navigate = useNavigate();
   const location = useLocation();
   const {loading,fetchData} = useAxiosFetch()
-  const from = location.state?.from?.pathname || "/"
+  const from = location.state?.from?.pathname || "/";
   //Toast States
   const [ show, setShow ] = useState( false )
   const [ toastMsg, setToastMsg ] = useState( "" )
@@ -79,6 +81,54 @@ export const MainProvider = ( { children } ) =>
   {
     const { name, value } = e.target;
     setFormData({...formData, [name]: value})
+  }
+
+  const handlePayment = (amount,onclose) =>
+  {
+    const paymentOption = {
+      email: user.email,
+      firstname: user.name,
+      lastname: user.name,
+      phoneNumber: `+234${user.phone_number}`,
+      fixedAmount: parseFloat( amount )
+    }
+    const merchantRef = generateRefrence();
+    const merchantKey = "39494920422440494939";
+    if (typeof window.initializePepsaPay === 'undefined') {
+      console.error('PepsaPay script not loaded');
+      return;
+    }
+
+    const handler = window.initializePepsaPay(
+      paymentOption,
+      merchantRef,
+      merchantKey,
+      function onClose( response )
+      {
+        if ( response.error ) {
+          console.error( "Onclose error:", response.error );
+          openToast("Error occured","error")
+        } else {
+          console.log("Onclose Data", response);
+        }
+        onclose();
+      },
+      async function callback( response )
+      {
+        if (response.error) {
+          console.error("ONSUCCESS ERROR:", response.error);
+          openToast("Error occured","error")
+        } else {
+          console.log("ONSUCCESS DATA:", response.data);
+          const respond = await fetchData( true, `/profile?amount=${ amount }` )
+          setUser( prev => ( { ...prev, balance: respond.data.user.balance } ) );
+          openToast( "Balance updated", "success" );
+        }
+        onclose();
+      }
+    )
+
+    handler();
   }
 
   const loginSubmit = async () =>
@@ -312,7 +362,7 @@ const closeToast = () =>
     } )()
   },[fetchData] )
   return (
-    <MainContext.Provider value={ {formData,persist,setPersist,handleChange,isLoading,show,status,toastMsg,openToast,closeToast,loginSubmit,user,setUser,registerSubmit,resendOtp,verifyCode,timeInSec,categories,removeFromWishlist,addToWishlist,wishlists,deleteAll} }>
+    <MainContext.Provider value={ {formData,persist,setPersist,handleChange,isLoading,show,status,toastMsg,openToast,closeToast,loginSubmit,user,setUser,registerSubmit,resendOtp,verifyCode,timeInSec,categories,removeFromWishlist,addToWishlist,wishlists,deleteAll,handlePayment} }>
       {children}
     </MainContext.Provider>
   )

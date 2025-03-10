@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, Button, } from "@nextui-org/react";
+import { Image, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Input, Accordion, AccordionItem, Button, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, } from "@nextui-org/react";
 import logo from "@/assets/logo.png"
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { BsCart2, BsHeart, BsList, BsPersonCircle, BsSearch, BsXLg } from "react-icons/bs";
@@ -65,17 +65,51 @@ const Offcanvas = ({isOpen, toggleIsOpen}) =>
   )
 }
 
+export const Deposit = ({isOpen,onOpenChange}) =>
+{
+  const [ amount, setAmount ] = useState( "" )
+  const {handlePayment} = useMainContext()
+  const deposit = ( onClose ) =>
+  {
+    handlePayment(amount,onClose)
+  }
+  return (
+    <Modal isOpen={ isOpen } onOpenChange={onOpenChange}>
+      <ModalContent>
+        { ( onClose ) => (
+          <>
+            <ModalHeader>Deposit</ModalHeader>
+            <ModalBody>
+              <Input
+                label="Deposit Amount"
+                value={ amount }
+                onChange={ ( e ) => setAmount( e.target.value ) }
+                placeholder="Enter Deposit amount"
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button className="payment-button" color="primary" onClick={()=>deposit(onClose)}>Deposit</Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  )
+}
+
 const MobileNav = () =>
 {
-  const [ isOpen, setIsOpen ] = useState( false );
+  const [ isOffOpen, setIsOffOpen ] = useState( false );
   const [search,setSearch] = useState("")
-  const toggleIsOpen = () => setIsOpen( !isOpen );
+  const toggleIsOpen = () => setIsOffOpen( !isOffOpen );
   const { user } = useMainContext()
   const logout = useLogout();
-    const getInitials = (str) =>{
+  const getInitials = ( str ) =>
+  {
   	if(typeof str !== "string" || str.trim().length===0) return "";
   	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
-    }
+  }
+  const {isOpen,onOpenChange,onOpen} = useDisclosure()
   const navigate = useNavigate()
     const searchItem = () =>
     {
@@ -115,7 +149,8 @@ const MobileNav = () =>
               </DropdownItem>
                 <DropdownItem key="profile-setting">
                   <Link to="profile">Profile</Link>
-                </DropdownItem>
+                  </DropdownItem>
+                  <DropdownItem key="deposit" onClick={onOpen}>Deposit</DropdownItem>
                 <DropdownItem key="order">
                   <Link to="order">Orders</Link>
                 </DropdownItem>
@@ -151,7 +186,8 @@ const MobileNav = () =>
       </div>
       
       
-      <Offcanvas isOpen={isOpen} toggleIsOpen={toggleIsOpen}/>
+      <Offcanvas isOpen={ isOffOpen } toggleIsOpen={ toggleIsOpen } />
+      <Deposit isOpen={isOpen} onOpenChange={onOpenChange}/>
     </nav>
   )
 }

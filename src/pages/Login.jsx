@@ -21,7 +21,7 @@ const Login = () =>
   return (
     <div className="min-h-full flex items-center justify-center">
       <div className="w-full md:w-3/4 lg:w-1/2:2xl:w-1/4 shadow-md border rounded-md py-4 px-8">
-        <p className="text-primary text-2xl font-bold text-center my-4">Weclome To Bundlet</p>
+        <p className="text-primary text-2xl font-bold text-center my-4">Welcome To Bundlet</p>
         <p className="text-lg font-thin">Login</p>
         <hr className="mb-8"/>
         <div className="my-4">

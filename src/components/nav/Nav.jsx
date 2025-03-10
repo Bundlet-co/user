@@ -1,10 +1,11 @@
-import { Button, Image, Input,Navbar, NavbarBrand, NavbarContent,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, NavbarItem } from "@nextui-org/react";
+import { Button, Image, Input,Navbar, NavbarBrand, NavbarContent,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, NavbarItem, useDisclosure } from "@nextui-org/react";
 import logo from "@/assets/logo.png"
 import { BsCart2, BsHeart, BsPersonCircle, BsSearch } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import useMainContext from "@/hooks/useMainContext";
 import useLogout from "@/hooks/useLogout";
 import { useState } from "react";
+import { Deposit } from "./MobileNav";
 
 
 const Nav = () =>
@@ -12,6 +13,7 @@ const Nav = () =>
   const { user } = useMainContext();
   const [search,setSearch] = useState("")
   const logout = useLogout();
+  const { isOpen, onOpenChange, onOpen } = useDisclosure();
 const getInitials = (str) =>{
   	if(typeof str !== "string" || str.trim().length===0) return "";
   	return str.trim().split(/\s+/).map(word=>word.charAt(0)).join("").toUpperCase()
@@ -82,6 +84,7 @@ const getInitials = (str) =>{
               <DropdownItem key="profile-setting">
                   <Link to="profile">Profile</Link>
                 </DropdownItem>
+                <DropdownItem key="deposit" onClick={onOpen}>Deposit</DropdownItem>
                 <DropdownItem key="order">
                   <Link to="order">Orders</Link>
                 </DropdownItem>
@@ -97,6 +100,7 @@ const getInitials = (str) =>{
             </Link>)}
         </NavbarContent>
       </Navbar>
+      <Deposit isOpen={isOpen} onOpenChange={onOpenChange}/>
     </nav>
   )
 }
