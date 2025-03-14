@@ -131,7 +131,10 @@ const Cart = () =>
                     {cart.suplementryProducts.map( (product,supIndex) => (
                       <div key={ product.id } className={ "px-2 flex items-center space-x-1" } role="button">
                         <p className="font-bold">{ supIndex + 1 }.</p>
-                        <p className="text-tiny font-bold ms-2 me-4">{ user.id!== "" && product.name === null ? product.product.name : product.name }</p>
+                        <div>
+                          <p className="text-tiny font-bold ms-2 me-4">{ user.id !== "" && !product.name ? product.product.name : product.name }</p>
+                          <p className="text-tiny font-bold ms-2 me-4">&#8358; { (product.price).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+                        </div>
                         <button className="px-4 py-1 rounded-lg border-0 bg-neutral-200 hover:bg-neutral-300"  onClick={()=>decreaseSup(index,supIndex)}> <BsDash/></button>
                         
                         <p className="mx-8 text-tiny">{product.quantity}</p>

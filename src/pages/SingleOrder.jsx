@@ -53,10 +53,12 @@ const SingleOrder = () =>
                         <img src={`${dev_url}/${item.product.dp.replace("public/","")}`} alt={ item.product.name } className="w-10 h-10 object-contain" />
                         <p className="font-bold">{ item.product.name }</p>
                       </div>
-                      <p className="font-bold">&#8358;{ item.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+                      <p className="font-bold">&#8358;{ item.price.toLocaleString( "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 } ) }</p>
+                      
                     </div>
                     <div>
-                      <p>Quantity: { item.quantity }{ item.product.unit}</p>
+                      <p>Quantity: { item.quantity }</p>
+                      <p>Total cost: &#8358; {( item.price*item.quantity).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
                       <div className="flex space-x-2 items-center">
                         { item.variation !== null && (
                           <div className="flex space-x-2 items-center">
@@ -78,11 +80,12 @@ const SingleOrder = () =>
                             <div key={ sup.id } className="border p-4 rounded-lg">
                               <div className="flex justify-between">
                                 <div className="flex space-x-2 items-center">
-                                  <p className="font-bold">{ sup.name }</p>
+                                  <p className="font-bold">{ sup.name || sup.product.name }</p>
                                 </div>
-                                <p className="font-bold">&#8358;{ sup.price }</p>
+                                <p className="font-bold">&#8358;{ sup.product.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
                               </div>
                               <div>
+                                <p>Total Cost: &#8358; { sup.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
                                 <p>Quantity: { sup.quantity }</p>
                               </div>
                             </div>

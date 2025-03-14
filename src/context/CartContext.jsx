@@ -150,7 +150,7 @@ export const CartProvider = ( { children } ) =>
     if ( index === -1 ) return;
     const product = tempcart[ index ]
     product.quantity++;
-    product.total = product.quantity * product.price
+    product.total +=product.price
     tempcart[index] = product
     
     if ( user && user.accessToken ) {
@@ -182,7 +182,7 @@ export const CartProvider = ( { children } ) =>
     if ( product.quantity === 0 ) {
       return await deleteItem( { id, variant } );
     } else {
-      product.total = product.quantity * product.price;
+      product.total -= product.price;
       tempcart[index] = product;
       
       if (user && user.accessToken) {
@@ -202,13 +202,14 @@ export const CartProvider = ( { children } ) =>
 
 
 
-  const updateCartItem = useCallback(async (cartItemId,newQuantity,newTotal) =>
+  const updateCartItem = useCallback(async (cartItemId,newQuantity,newTotal,supplementaryProducts) =>
   {
       try {
         await fetchData(true, "/cart", "patch", {
           id: cartItemId,
           quantity: newQuantity,
-          total:newTotal
+          total: newTotal,
+          supplementaryProducts
         });
         
       } catch (error) {
@@ -249,14 +250,13 @@ export const CartProvider = ( { children } ) =>
     const product = tempcart[ index ]
     const supProduct = product.suplementryProducts[ supIndex ];
     supProduct.quantity++
-    supProduct.price = supProduct.total * supProduct.quantity;
+    supProduct.price = user.id === "" ? supProduct.total * supProduct.quantity : supProduct.product.price * supProduct.quantity;
     product.suplementryProducts[ supIndex ] = supProduct;
-    product.total+=supProduct.total
+    product.total += user.id === "" ? supProduct.total : supProduct.product.price;
     tempcart[ index ] = product;
     if ( user && user.accessToken ) {
-      await updateCartItem( product.id, product.quantity, product.total );
+      await updateCartItem( product.id, product.quantity, product.total,supProduct );
       setCarts( tempcart )
-      openToast( "Item quantity updated in the cart", "success" );
       setLoading(false)
     } else {
       // Save updated cart in local storage
@@ -272,12 +272,12 @@ export const CartProvider = ( { children } ) =>
     const product = tempcart[ index ]
     const supProduct = product.suplementryProducts[ supIndex ];
     supProduct.quantity--
-    product.total-=supProduct.total
+    product.total-= user.id === "" ? supProduct.total : supProduct.product.price;
     if ( supProduct.quantity === 0 ) {
       product.suplementryProducts.filter( item => item.id !== supProduct.id )
       tempcart[ index ] = product;
       if ( user && user.accessToken ) {
-      await updateCartItem( product.id, product.quantity, product.total );
+      await updateCartItem( product.id, product.quantity, product.total,supProduct );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );
       setLoading(false)
@@ -289,12 +289,12 @@ export const CartProvider = ( { children } ) =>
       }
       return
     }
-    supProduct.price = supProduct.total * supProduct.quantity;
+    supProduct.price = user.id === "" ? supProduct.total * supProduct.quantity : supProduct.product.price * supProduct.quantity;
     product.suplementryProducts[ supIndex ] = supProduct;
     
     tempcart[ index ] = product;
     if ( user && user.accessToken ) {
-      await updateCartItem( product.id, product.quantity, product.total );
+      await updateCartItem( product.id, product.quantity, product.total,supProduct );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );
       setLoading(false)
