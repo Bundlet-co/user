@@ -108,14 +108,14 @@ export const CartProvider = ( { children } ) =>
       try {
       if ( carts.length > 0 && localStorage.getItem("carts") !== null ) {
         
-          const res = await fetchData( true, '/cart/add', "post", { carts:[...carts,{...cartItem, supplementaryProducts:JSON.stringify(cartItem.supplementaryProducts)}] } );
+          const res = await fetchData( true, '/cart/add', "post", { carts:[...carts,{...cartItem, supplementaryProducts:JSON.stringify(cartItem.suplementryProducts)}] } );
           setCount(res.data.carts.length)
           setCarts( res.data.carts );
           openToast( "Item added to cart", "success" );
         localStorage.removeItem( "carts" )
         setSup([])
       } else {
-        const res = await fetchData( true, "/cart", "post", { productId: product.id, quantity: cartItem.quantity, variation: cartItem.variation, supplementaryProducts:JSON.stringify(cartItem.supplementaryProducts), price: cartItem.price, total: cartItem.total } )
+        const res = await fetchData( true, "/cart", "post", { productId: product.id, quantity: cartItem.quantity, variation: cartItem.variation, supplementaryProducts:JSON.stringify(cartItem.suplementryProducts), price: cartItem.price, total: cartItem.total } )
         const fetched = res.data.cart
         let tempCart = [ ...carts ]
         const index = tempCart.findIndex( item => item.productId === fetched.productId && item.variation.variant === fetched.variation.variant )
