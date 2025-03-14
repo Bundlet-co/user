@@ -2,6 +2,7 @@ import { Image } from "@nextui-org/react";
 import logo from "../assets/img2.png"
 import img from "../assets/img3.png"
 import { BsEnvelope, BsFacebook, BsGithub, BsTwitterX } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Footer = () =>
 {
@@ -10,7 +11,22 @@ const Footer = () =>
   ]
 
   const help = [
-    "customer support", "delivery details", "Terms & conditions", "Privacy policy"
+    {
+      name: "customer support",
+      link:"/"
+    },
+    {
+      name: "delivery details" ,
+      link:"/"
+    },
+    {
+      name: "Terms & conditions",
+      link:"/terms"
+    },
+    {
+      name: "Privacy policy",
+      link:"/privacy"
+    }
   ]
 
   const faq = [
@@ -41,9 +57,9 @@ const Footer = () =>
         </div>
         <div className="col-span-1">
           <p className="text-lg font-bold uppercase">HELP</p>
-          <div>
+          <div className="grid grid-cols-1">
             { help.map( (item,index) => (
-              <p className="capitalize my-2 text-neutral-700" key={ index }>{ item }</p>
+              <Link to={item.link} className="capitalize my-2 text-neutral-700" key={ index }>{ item.name }</Link>
             ))}
           </div>
         </div>
@@ -59,7 +75,7 @@ const Footer = () =>
       <hr className="my-4 border border-neutral-400" />
       
       <div className="flex flex-col items-center justify-center lg:flex-row lg:justify-between">
-        <p className="text-center text-neutral-800">Pepsa Foods &copy; { year }. All rights Reserved</p>
+        <p className="text-center text-neutral-800">Bundlet.co &copy; { year }. All rights Reserved</p>
         <div>
           <Image src={ img } className="object-contain"/>
         </div>

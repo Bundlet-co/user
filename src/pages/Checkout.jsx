@@ -71,8 +71,6 @@ const Checkout = () =>
     }
     try {
       const res = await fetchData( true, `/order`, "post", data );
-      const result = await res.data.order;
-      console.log( result );
       openToast(res.message,"success")
       navigate( '/order' )
       deleteAll()

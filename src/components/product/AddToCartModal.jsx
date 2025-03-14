@@ -14,7 +14,6 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
 
   const addSuplementryProduct = ( sup ) =>
   {
-    console.log(sup);
     setSuplementryProducts( ( prevProducts ) => [ ...prevProducts, {
       ...sup,total:sup.price,quantity:1
     }])
@@ -33,7 +32,6 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
 
   const decreseSup = (id) =>
   {
-    console.log(id);
     const temSup = [...suplementryProducts]
     const product = temSup.find( item => item.id === id );
     const index = temSup.findIndex( item => item.id === id );
@@ -48,8 +46,6 @@ const AddToCartModal = ( { isOpen = false, onOpenChange = () => { }, product = P
       setSuplementryProducts(temSup)
     }
 
-    console.log( product );
-    console.log(temSup);
   }
 
   return (

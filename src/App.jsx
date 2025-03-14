@@ -16,6 +16,9 @@ import Profile from "./pages/Profile";
 import { CartProvider } from "./context/CartContext";
 import Checkout from "./pages/Checkout";
 import Order from "./pages/Order";
+import SingleOrder from "./pages/SingleOrder";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 
 const App = () => {
@@ -34,6 +37,7 @@ const App = () => {
         <Route path="verify" element={ <Verify /> } />
         <Route path="cart" element={ <Cart /> } />
         <Route path="wishlist" element={ <Wishlist /> } />
+        
         <Route path="product">
           <Route index element={ <Product /> } />
           <Route path=":id" element={<SingleProduct/>}/>
@@ -42,9 +46,14 @@ const App = () => {
           <Route element={ <RequiredAuth /> }>
             <Route path="profile" element={ <Profile /> } />
             <Route path="checkout" element={ <Checkout /> } />
-            <Route path="order" element={<Order/>}/>
+            <Route path="order">
+              <Route index element={ <Order /> } />
+              <Route path=":id" element={<SingleOrder/>}/>
+            </Route>
           </Route>
         </Route>
+        <Route path="privacy" element={<Privacy/>}/>
+        <Route path="terms" element={<Terms/>}/>
         <Route path="*" element={<Missing/>}/>
       </Route>
     </Routes>

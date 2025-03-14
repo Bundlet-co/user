@@ -31,7 +31,6 @@ export const CartProvider = ( { children } ) =>
   const {fetchData}= useAxiosFetch()
   const [ carts, setCarts ] = useState( () => {
     const storedCarts = localStorage.getItem( "carts" );
-    console.log(storedCarts);
   return storedCarts ? [...JSON.parse(storedCarts)] : [];
 });
   const [ cartSubTotal, setCartSubTotal ] = useState( 0 );
@@ -43,7 +42,6 @@ export const CartProvider = ( { children } ) =>
 
   const addToCart = async( product = PRODUCT, selectedVariation, supplementaryProducts,setSup=()=>{} ) =>
   {
-    console.log(product);
     setLoading(true)
     let itemPrice = selectedVariation ?parseFloat( selectedVariation.price ) : product.price;
     
@@ -156,7 +154,6 @@ export const CartProvider = ( { children } ) =>
     tempcart[index] = product
     
     if ( user && user.accessToken ) {
-      console.log("Testing");
       await updateCartItem( id, product.quantity, product.total );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );
@@ -239,7 +236,6 @@ export const CartProvider = ( { children } ) =>
       const updatedCarts = carts.filter(item => 
         !(item.productId === id && ((item.variation && item.variation.variant === variant) || !item.variation))
       );
-      console.log(updatedCarts);
       setCarts(updatedCarts);
       localStorage.setItem("carts", JSON.stringify(updatedCarts));
       openToast( "Item removed from cart", "success" );
@@ -258,7 +254,6 @@ export const CartProvider = ( { children } ) =>
     product.total+=supProduct.total
     tempcart[ index ] = product;
     if ( user && user.accessToken ) {
-      console.log("Testing");
       await updateCartItem( product.id, product.quantity, product.total );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );
@@ -282,7 +277,6 @@ export const CartProvider = ( { children } ) =>
       product.suplementryProducts.filter( item => item.id !== supProduct.id )
       tempcart[ index ] = product;
       if ( user && user.accessToken ) {
-      console.log("Testing");
       await updateCartItem( product.id, product.quantity, product.total );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );
@@ -300,7 +294,6 @@ export const CartProvider = ( { children } ) =>
     
     tempcart[ index ] = product;
     if ( user && user.accessToken ) {
-      console.log("Testing");
       await updateCartItem( product.id, product.quantity, product.total );
       setCarts( tempcart )
       openToast( "Item quantity updated in the cart", "success" );

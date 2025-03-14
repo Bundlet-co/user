@@ -5,6 +5,7 @@ import { dev_url } from "@/utils/axios";
 import { Image } from "@nextui-org/react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 
 const Order = () =>
@@ -49,7 +50,7 @@ const Order = () =>
           <p className="text-lg md:text-xl text-primary py-2 font-extrabold">My Orders</p>
           <div className="flex-1 grid grid-cols-1 gap-4">
             { orders.map( order => (
-              <div key={ order.id } className="border p-2 rounded-md">
+              <Link to={`/order/${order.id}`} key={ order.id } className="border p-2 rounded-md">
                 <p className="text-tiny"><span className="capitalize font-bold">order Id:</span> { order.id }</p>
                 <div className="flex items-center space-x-2">
                   <div className="">
@@ -61,7 +62,7 @@ const Order = () =>
                     <p className="text-tiny"><span className="capitalize font-bold">Ordered Date:</span> { dayjs(order.createdAt).format("MMMM D, YYYY") }</p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

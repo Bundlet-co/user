@@ -24,9 +24,9 @@ const Item = ({carousel,phrase,buyWords}) =>
         <p className="text-small">{phrase } on</p>
         <p className="text-2xl mb-3 capitalize">{ carousel.name }</p>
         <div className="flex items-center space-x-3 justify-center flex-col">
-          <p className="line-through text-danger text-small">₦{ carousel.price }</p>
+          <p className="line-through text-danger text-small">₦{ carousel.price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
           <p className="tex-2xl font-mono font-bold">now</p>
-          <p className="text-4xl uppercase font-bold ">{ carousel.discount_type.toLowerCase() === "flat" ? `₦${carousel.price - carousel.discount_amount}`: `₦${carousel.price-((carousel.discount_amount*carousel.price)/100)}` }</p>
+          <p className="text-4xl uppercase font-bold ">{ carousel.discount_type.toLowerCase() === "flat" ? `₦${(carousel.price - carousel.discount_amount).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`: `₦${(carousel.price-((carousel.discount_amount*carousel.price)/100)).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}` }</p>
         </div>
       </div>
       <div className="absolute bottom-56 flex justify-center items-center flex-col right-1  rotate-[30deg]">

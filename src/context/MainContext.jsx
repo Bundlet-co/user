@@ -263,7 +263,6 @@ const closeToast = () =>
       }
     } else {
       if ( wishlists.length > 0 && localStorage.getItem( "wishlists" ) !== null ) {
-        console.log({ wishlist: [ ...wishlists, product_id ] });
         await fetchData( true, '/wishlist/add', "post", { wishlist: [ ...wishlists, {product_id ,inWishlist:true}] } );
         setWishlists( [...wishlists,{product_id,inWishlist:true}] )
         openToast( "Item added to Favorite", "success" );

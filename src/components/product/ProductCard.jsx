@@ -43,7 +43,7 @@ const ProductCard = ( { product } ) =>
       <CardFooter className='text-small justify-start flex-col mt-0 pt-0'>
         <div className='w-full'>
           <Link to={`/product/${product.id}`}>
-            <p className="capitalize text-medium font-semibold">{ product.name }</p>
+            <p className="capitalize text-small font-semibold text-wrap w-[10rem]">{ product.name }</p>
             
             <p className='text-primary font-bold text-small'>
               <span className={ product.discount_amount ? "line-through text-italic me-1 text-tiny font-thin text-danger" : "" }>&#8358;{ product.price }</span>
