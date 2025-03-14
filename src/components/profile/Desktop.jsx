@@ -98,7 +98,7 @@ const Desktop = () =>
         <div className="col-span-full md:col-span-2 border-2 rounded-md p-4">
           <p className="text-lg text-neutral-800">Account Balance</p>
           <hr />
-          <p className="text-lg font-bold">Wallet: ₦{ user.balance || 0 }</p>
+          <p className="text-lg font-bold">Wallet: ₦ { user.balance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) || 0 }</p>
         </div>
       </div>
       { isEdit && <EditModal isOpen={ isOpen } onOpenChange={ onOpenChange } closeToggle={toggleEdit}/> }
