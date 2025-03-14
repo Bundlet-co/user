@@ -169,7 +169,7 @@ const Terms = () =>
       <p className="mb-4 text-black text-lg font-semibold">20.  Contact Information</p>
       <p className="mb-4">For questions or support, reach us via:</p>
       { contacts.map( ( item, index ) => (
-        <div className="flex space-x-2" key={ index }>
+        <div className="flex space-x-1 text-tiny" key={ index }>
           { item.icon }
           <p>{ item.name }:</p>
           <Link to={ item.link }>{ item.content }</Link>
