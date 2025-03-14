@@ -2,6 +2,7 @@ import CartLoader from "@/components/animations/CartLoader";
 import EmptyItem from "@/components/EmptyItem";
 import useAxiosFetch from "@/hooks/useAxiosFetch";
 import useCartContext from "@/hooks/useCartContext";
+import useMainContext from "@/hooks/useMainContext";
 import { dev_url } from "@/utils/axios";
 import { Button, Image } from "@nextui-org/react";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ const Cart = () =>
   const [ cartItems, setCartItems ] = useState( [] );
   const { fetchData } = useAxiosFetch();
   const [isLoading,setIsLoading] = useState(true)
+  const {user} = useMainContext()
 
   const navigate = useNavigate();
 
@@ -129,7 +131,7 @@ const Cart = () =>
                     {cart.suplementryProducts.map( (product,supIndex) => (
                       <div key={ product.id } className={ "px-2 flex items-center space-x-1" } role="button">
                         <p className="font-bold">{ supIndex + 1 }.</p>
-                        <p className="text-tiny font-bold ms-2 me-4">{ product.name }</p>
+                        <p className="text-tiny font-bold ms-2 me-4">{ user.id!== "" && product.name === null ? product.product.name : product.name }</p>
                         <button className="px-4 py-1 rounded-lg border-0 bg-neutral-200 hover:bg-neutral-300"  onClick={()=>decreaseSup(index,supIndex)}> <BsDash/></button>
                         
                         <p className="mx-8 text-tiny">{product.quantity}</p>
