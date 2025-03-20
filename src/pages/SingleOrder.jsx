@@ -9,6 +9,9 @@ const SingleOrder = () =>
 {
   const { id } = useParams();
   const [ order, setOrder ] = useState( null );
+  const [ vat, setVat ] = useState( 0 )
+  const [ charge, setCharge ] = useState( 0 )
+  const [subTotal, setSubTotal] = useState(0)
   const {fetchData,loading} = useAxiosFetch()
   
   useEffect( () =>
@@ -18,7 +21,28 @@ const SingleOrder = () =>
       try {
         const res = await fetchData( true, `/order/${ id }` );
         const result = res.data;
-        setOrder(result.orders)
+        const chargeCal = 200 * result.orders.products.length;
+        const subtotatCal = result.orders.products.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
+
+        // Calculate supplementary product price
+        const supPrice = result.orders.products.reduce((acc, product) => {
+          if (product.supplementryProducts) {
+            return acc + product.supplementryProducts.reduce((sum, item) => sum + item.price, 0);
+          }
+          return acc;
+        }, 0);
+
+        const total = subtotatCal + supPrice;
+        const vatCal = total * 0.075;
+
+        setSubTotal(total);
+        setVat(vatCal);
+        setCharge(chargeCal);
+        setOrder(result.orders);
+
       } catch (error) {
         console.error(error);
       }
@@ -43,7 +67,12 @@ const SingleOrder = () =>
           <p className="text-primary text-sm mb-2">Order Id: { order.id }</p>
           <div className="flex items-center justify-between">
             <p className={ order.status === "PENDING" ? "text-medium text-warning" : order.status === "DELIVERED" ? "text-medium text-success" : order.status === "CANCELLED" ? "text-medium text-danger" : "text-medium text-primary" }><span className="capitalize font-bold text-black">Status:</span> { order.status }</p>
-            <p className="text-medium"><span className="capitalize font-bold">Net Amount:</span> &#8358; { parseFloat(order.netAmount).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+            <div>
+              <p className="text-medium"><span className="capitalize font-bold">Subtotal:</span> &#8358; { subTotal.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+              <p className="text-medium"><span className="capitalize font-bold">VAT:</span> &#8358; { vat.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+              <p className="text-medium"><span className="capitalize font-bold">Charges:</span> &#8358; { charge.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+              <p className="text-medium"><span className="capitalize font-bold">Net Amount:</span> &#8358; { parseFloat(order.netAmount).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) }</p>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 { order.products.map( item => (

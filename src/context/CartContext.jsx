@@ -327,7 +327,7 @@ export const CartProvider = ( { children } ) =>
     ( () =>
     {
       const subTotal = carts.reduce((acc, item) => acc + item.total, 0)
-      const tempTax = subTotal * 0.05
+      const tempTax = subTotal * 0.075
       const tax = parseFloat( tempTax.toFixed( 2 ) );
       const total = subTotal + tax;
       setCartSubTotal(subTotal);
