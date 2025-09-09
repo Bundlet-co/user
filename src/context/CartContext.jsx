@@ -146,6 +146,14 @@ export const CartProvider = ({ children }) => {
 					localStorage.removeItem("carts");
 					setSup([]);
 				} else {
+					console.log({
+						productId: product.id,
+						quantity: cartItem.quantity,
+						variation: cartItem.variation || undefined,
+						supplementaryProducts: JSON.stringify(cartItem.suplementryProducts),
+						price: cartItem.price,
+						total: cartItem.total,
+					});
 					const res = await fetchData(true, "/cart", "post", {
 						productId: product.id,
 						quantity: cartItem.quantity,
