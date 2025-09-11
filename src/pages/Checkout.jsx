@@ -18,6 +18,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { FaCartShopping, FaPencil } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { usePaystackPayment } from "react-paystack";
+import BackNav from "@/components/BackNav";
 
 const Checkout = () => {
 	const { carts, cartTax, cartSubTotal, cartTotal, deleteAll } =
@@ -37,7 +38,7 @@ const Checkout = () => {
 		reference: "bundlet-" + new Date().getTime().toString(),
 		email: user.email,
 		amount: cartTotal * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-		publicKey: "pk_test_7f96b6ff2c3b5ac6a1f32212f6be0edcff2fe54b",
+		publicKey: " pk_live_58c8df2bc16fc5632671c2f7f0afe87edede5d02",
 	};
 	const initializePayment = usePaystackPayment(config);
 
@@ -106,6 +107,7 @@ const Checkout = () => {
 
 	return (
 		<div className="h-full">
+			<BackNav />
 			{!isDispatchActive && (
 				<div className="h-full">
 					<p className="text-lg md:text-xl text-primary py-2 font-extrabold col-span-full h-fit">

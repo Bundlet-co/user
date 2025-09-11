@@ -16,6 +16,7 @@ import useCartContext from "@/hooks/useCartContext";
 import { daysLeftToExpire } from "@/utils/functions";
 import { dev_url } from "@/utils/axios";
 import { BsDash, BsPlus } from "react-icons/bs";
+import BackNav from "@/components/BackNav";
 
 const SingleProduct = () => {
 	const { id } = useParams();
@@ -96,6 +97,7 @@ const SingleProduct = () => {
 	}, []);
 	return (
 		<section className="h-full overflow-y-auto">
+			<BackNav />
 			{isLoading && !product && (
 				<div className="h-full flex justify-center items-center">
 					<Spinner />
