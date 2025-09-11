@@ -37,8 +37,8 @@ const Checkout = () => {
 	const config = {
 		reference: "bundlet-" + new Date().getTime().toString(),
 		email: user.email,
-		amount: cartTotal * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-		publicKey: " pk_live_58c8df2bc16fc5632671c2f7f0afe87edede5d02",
+		amount: cartTotal * 100,
+		publicKey: "pk_live_58c8df2bc16fc5632671c2f7f0afe87edede5d02",
 	};
 	const initializePayment = usePaystackPayment(config);
 
